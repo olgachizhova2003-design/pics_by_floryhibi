@@ -49,6 +49,11 @@ const NAI_STYLES={
    "n": 10,
    "img": "nai/v5/s10.jpg",
    "text": "0.6::obj Shep::, 0.5::rella::, 0.4::kagoya1219 ::, 0.7::96yottea::, 0.8::aoma xuanzexuexi::, 0.5::vlfdus 0 ::, 0.8::kuby_hq::, 0.8::nocetus::, 2.0::cinematic filter::,  1.0::zero_q_0q::, year 2026, 0.5::teeniika::, 0.9::dang0_23 ::, 0.3::sanbonzakura::, 0.5::umikochannart::, bang dacy, 0.7::blackbox::, bebseo."
+  },
+  {
+   "n": 11,
+   "img": "nai/v5/s11.jpg",
+   "text": "masterpiece, best quality, 1girl, long pastel pink hair, flower crown, spring garden, soft warm sunlight, floating petals, dreamy, painterly style"
   }
  ],
  "v4": [
