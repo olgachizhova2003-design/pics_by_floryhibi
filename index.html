@@ -13,14 +13,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ================= PALETTES ================= */
+
 body[data-palette="peony"]{--acc:#d9759b;--acc2:#e89bb8;--acc3:#f3c6d6;--deep:#8d4a63}
 body[data-palette="jade"]{--acc:#4c9b7f;--acc2:#6fb89d;--acc3:#c4e2d4;--deep:#2f6b54}
 body[data-palette="immortal"]{--acc:#b78a4e;--acc2:#d4af74;--acc3:#eedcb9;--deep:#7a2e3f}
 body.dark[data-palette="peony"]{--acc:#c97898;--acc2:#e0a0ba;--acc3:#5a3346;--deep:#e0a0ba}
 body.dark[data-palette="jade"]{--acc:#6fbf9f;--acc2:#8fd4ba;--acc3:#2c4a3e;--deep:#8fd4ba}
 body.dark[data-palette="immortal"]{--acc:#cfa465;--acc2:#e2c48d;--acc3:#4d3a24;--deep:#e2c48d}
-/* ================= THEMES ================= */
+
 body{
   --bg:#fcf7f9;--bg2:#f5e4ea;--surface:rgba(255,255,255,.42);--surface2:rgba(255,255,255,.6);
   --line:rgba(141,74,99,.16);--text:#432533;--muted:#9a7281;
@@ -52,7 +52,6 @@ img{max-width:100%}
 .serif{font-family:'Cormorant Garamond',serif}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
 
-/* ================= HEADER ================= */
 header{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s,border-color .4s,box-shadow .4s;
   background:color-mix(in srgb,var(--bg) 30%,transparent);backdrop-filter:blur(14px);
   border-bottom:1px solid transparent}
@@ -90,7 +89,6 @@ nav a:hover::after{right:0}
 .theme-pill button.on{background:var(--text);color:var(--bg)}
 .burger{display:none;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font-size:17px;padding:7px 12px}
 
-/* ================= HERO ================= */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 0 70px;overflow:hidden}
 .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center;width:100%}
 .hero-visual{position:relative}
@@ -153,23 +151,20 @@ h1.title small{display:block;font-family:'Inter';font-size:13px;letter-spacing:3
 .scroll-hint::after{content:'';width:1px;height:44px;background:linear-gradient(var(--acc),transparent);
   animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-/* floating decorative elements */
+
 .deco{position:absolute;color:var(--acc);opacity:.4;pointer-events:none;z-index:1;
   animation:drift 9s ease-in-out infinite;font-size:18px}
 @keyframes drift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(12deg)}}
 
-/* ================= SECTIONS ================= */
 section{padding:100px 0;position:relative;z-index:2}
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:52px;flex-wrap:wrap}
 .sec-head h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(44px,5.5vw,72px);line-height:1}
 .sec-head h2::before{content:attr(data-n);display:block;font-family:'Inter';font-size:12px;letter-spacing:4px;
   color:var(--acc);margin-bottom:14px}
 .sec-head .lead{color:var(--muted);max-width:380px;font-size:15px;line-height:1.6;margin:0}
-/* scroll reveal */
 .rv{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
 .rv.in{opacity:1;transform:none}
 
-/* --- cards (shared core) --- */
 .card{background:var(--surface);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:24px;
   padding:22px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;
   transition:transform .45s ease,border-color .45s ease,box-shadow .45s ease}
@@ -193,7 +188,6 @@ section{padding:100px 0;position:relative;z-index:2}
 .card .dl.off{opacity:.55;pointer-events:none;border-style:dashed}
 .card .dl.off::after{content:''}
 
-/* --- PRESETS: editorial numbered grid --- */
 #presetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;counter-reset:pr}
 #presetGrid .card{counter-increment:pr;padding:26px}
 #presetGrid .card::before{content:'0' counter(pr);position:absolute;top:18px;right:22px;z-index:2;
@@ -201,7 +195,6 @@ section{padding:100px 0;position:relative;z-index:2}
   text-shadow:0 1px 10px rgba(90,20,50,.5)}
 #presetGrid .card img.pimg{aspect-ratio:.92}
 
-/* --- PLUGINS: ровная сетка, как у пресетов, но со своей фишкой --- */
 #pluginGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 #pluginGrid .card{padding:26px}
 #pluginGrid .card::after{content:'✦ plugin';position:absolute;top:20px;right:22px;z-index:2;
@@ -211,7 +204,6 @@ section{padding:100px 0;position:relative;z-index:2}
 #pluginGrid .card img.pimg{aspect-ratio:1;border-radius:14px}
 #pluginGrid .card .col{display:flex;flex-direction:column;gap:12px;flex:1}
 
-/* ================= THEMES: горизонтальная лента ================= */
 .theme-wrap{position:relative}
 #themeGrid{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;
   padding:4px 4px 16px;scrollbar-width:thin;scrollbar-color:var(--acc) transparent}
@@ -219,7 +211,6 @@ section{padding:100px 0;position:relative;z-index:2}
 #themeGrid::-webkit-scrollbar-thumb{background:var(--acc);border-radius:99px}
 #themeGrid .card{flex:0 0 auto;scroll-snap-align:start;min-width:300px}
 #themeGrid .card img.pimg{height:340px;width:auto;aspect-ratio:auto;margin:0 auto;display:block}
-/* ширину карточки задаёт только картинка: текст подстраивается под неё */
 #themeGrid .card .col{width:0;min-width:100%}
 .th-nav{position:absolute;top:150px;translate:0 -50%;z-index:5;width:40px;height:40px;border-radius:50%;
   border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(10px);
@@ -230,7 +221,6 @@ section{padding:100px 0;position:relative;z-index:2}
 .tbtns{display:flex;gap:10px;flex-wrap:wrap}
 .tbtns .dl{flex:1;text-align:center;justify-content:center}
 
-/* ================= FOOTER ================= */
 footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:90px 0 40px;text-align:center;
   background:linear-gradient(transparent,color-mix(in srgb,var(--acc) 7%,transparent))}
 footer .big{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(56px,9vw,130px);
@@ -259,7 +249,6 @@ footer .fl-langs button:hover{border-color:var(--acc)}
 footer .fine{color:var(--muted);font-size:13px}
 footer .fine b{color:var(--acc);font-weight:500}
 
-/* --- NOVELAI: styles gallery with slider --- */
 .nai-sub{margin-bottom:56px}
 .nai-h{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:var(--deep);margin-bottom:22px}
 .nai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:24px}
@@ -292,7 +281,6 @@ footer .fine b{color:var(--acc);font-weight:500}
 .nai-copy:hover{background:var(--acc);color:#fff}
 .nai-copy.done{background:var(--acc);color:#fff}
 
-/* ================= RESPONSIVE ================= */
 @media(max-width:1080px){
   #pluginGrid{grid-template-columns:repeat(2,1fr)}
 }
@@ -434,7 +422,6 @@ footer .fine b{color:var(--acc);font-weight:500}
         <a class="btn btn-o" href="https://github.com/floryhibi" target="_blank" rel="noopener">🐙 GitHub</a>
         <a class="btn btn-o" href="https://boosty.to/floryhibi" target="_blank" rel="noopener">💜 Boosty</a>
         <a class="btn btn-o" href="https://hub.tavoai.dev/creators/HQ4G1" target="_blank" rel="noopener">🏠 Tavo Hub</a>
-        <a class="btn btn-o" href="https://chub.ai/users/floryhibi" target="_blank" rel="noopener">🎴 Chub</a>
       </div>
       <div class="about-repos">
         <a href="https://github.com/floryhibi/Tavo_PeonySet_by-floryhibi" target="_blank" rel="noopener">📦 PeonySet — GitHub</a>
@@ -475,7 +462,6 @@ footer .fine b{color:var(--acc);font-weight:500}
 
 <script src="nai-data.js"></script>
 <script>
-/* ================= DATA ================= */
 const T = {
 ru:{
   nav:["Пресеты","Плагины","Темы","Стили NovelAI","Обо мне"],
@@ -505,7 +491,7 @@ ru:{
     {n:"Dark Sakura",img:"themes/darksakura.jpg",multi:[{l:"iOS",f:"themes/darksakura-ios.thm"},{l:"Android",f:"themes/darksakura-android.thm"}],d:"Тёмная тема с сакурой: глубокие оттенки и розовые акценты. Отдельные файлы для iOS и Android.",t:["Тёмная","Сакура"]}
   ],
   cta4:"💬 Discord",dscQ:"Come chat with us?",dscBtn:"💬 Мой Discord",
-  abTitle:"Обо мне",abLead:"Кто присматривает за садом.",abText:"Привет! Я Оля (@floryhibi, раньше — Codex Workshop): делаю пресеты, плагины и UI-плашки для TavoAI. Новинки и бета-тесты — в моём Discord-саду, исходники живут на GitHub.",
+  abTitle:"Обо мне",abLead:"Кто присматривает за садом.",abText:"Привет! Я @floryhibi: делаю пресеты, плагины и UI-плашки для TavoAI. Новинки и бета-тесты — в моём Discord-саду, исходники живут на GitHub.",
   bugQ:"Something isn't working?",bugBtn:"🐛 Сообщить о баге",
   custQ:"Want something made for you?",custBtn:"♡ Custom TavoAI",
   stTitle:"Стили для NovelAI",stLead:"Готовые стилевые пресеты для генерации изображений.",styleWord:"Стиль",copy:"Скопировать",copied:"Скопировано ✓",slides:["Салют","Осень","Ночь"],
@@ -545,7 +531,7 @@ en:{
     {n:"Dark Sakura",img:"themes/darksakura.jpg",multi:[{l:"iOS",f:"themes/darksakura-ios.thm"},{l:"Android",f:"themes/darksakura-android.thm"}],d:"A dark theme with sakura: deep tones and pink accents. Separate files for iOS and Android.",t:["Dark","Sakura"]}
   ],
   cta4:"💬 Discord",dscQ:"Come chat with us?",dscBtn:"💬 My Discord",
-  abTitle:"About me",abLead:"Who tends the garden.",abText:"Hi! I'm Olya (@floryhibi, formerly Codex Workshop) — I craft presets, plugins and UI plaques for TavoAI. Fresh releases and beta tests live in my Discord garden, sources on GitHub.",
+  abTitle:"About me",abLead:"Who tends the garden.",abText:"Hi! I'm @floryhibi — I craft presets, plugins and UI plaques for TavoAI. Fresh releases and beta tests live in my Discord garden, sources on GitHub.",
   bugQ:"Something isn't working?",bugBtn:"🐛 Report a bug",
   custQ:"Want something made for you?",custBtn:"♡ Custom TavoAI",
   stTitle:"NovelAI Styles",stLead:"Ready-made style presets for image generation.",styleWord:"Style",copy:"Copy",copied:"Copied ✓",slides:["Fireworks","Autumn","Night"],
@@ -585,7 +571,7 @@ zh:{
     {n:"Dark Sakura",img:"themes/darksakura.jpg",multi:[{l:"iOS",f:"themes/darksakura-ios.thm"},{l:"Android",f:"themes/darksakura-android.thm"}],d:"深色樱花主题：浓郁的色调与粉色点缀。iOS 与 Android 分开下载。",t:["深色","樱花"]}
   ],
   cta4:"💬 Discord",dscQ:"Come chat with us?",dscBtn:"💬 我的 Discord",
-  abTitle:"关于我",abLead:"花园的主人。",abText:"你好！我是 Olya（@floryhibi，原 Codex Workshop），为 TavoAI 制作预设、插件与界面卡片。最新发布与内测在我的 Discord 花园，源代码在 GitHub。",
+  abTitle:"关于我",abLead:"花园的主人。",abText:"你好！我是 @floryhibi，为 TavoAI 制作预设、插件与界面卡片。最新发布与内测在我的 Discord 花园，源代码在 GitHub。",
   bugQ:"Something isn't working?",bugBtn:"🐛 反馈问题",
   custQ:"Want something made for you?",custBtn:"♡ Custom TavoAI",
   stTitle:"NovelAI 风格",stLead:"用于图像生成的现成风格预设。",styleWord:"风格",copy:"复制",copied:"已复制 ✓",slides:["烟花","秋天","夜晚"],
@@ -598,7 +584,6 @@ zh:{
   footer:"用 ♥ 制作 · FloryHibi"
 }};
 
-/* ================= LOGIC ================= */
 const hrefs=['#presets','#plugins','#themes','#styles','#about'];
 let lang=localStorage.getItem('pg-lang')||'ru';
 
@@ -637,21 +622,20 @@ function render(){
   document.title=(lang==='zh'?'FloryHibi · TavoAI 插件与预设':lang==='en'?'FloryHibi · Plugins & presets for TavoAI':'FloryHibi · Плагины и пресеты для TavoAI');
   renderNai();
 }
-/* --- NovelAI styles gallery: автозагрузка из папок репозитория --- */
 let cur=T.ru;
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const NAI_REPO='olgachizhova2003-design/pics_by_floryhibi';
-/* автоопределение числа кадров: картинка может быть одиночной или лентой из 2-3+ кадров */
+
 const probe=src=>new Promise(res=>{const im=new Image();im.onload=()=>res(im.naturalWidth/Math.max(1,im.naturalHeight));im.onerror=()=>res(0);im.src=src});
-const FRAME_RS=[0.684,0.75,0.667,0.5625]; /* известные пропорции кадра: 832/1216, 3:4, 2:3, 9:16 */
+const FRAME_RS=[0.684,0.75,0.667,0.5625];
 function naiFrames(r){
   if(!r)return 1;
-  if(r<=1.2)return 1; /* портрет/квадрат — одиночное фото */
+  if(r<=1.2)return 1;
   for(let n=2;n<=6;n++){const p=r/n;
     for(const fr of FRAME_RS)if(Math.abs(p-fr)<0.015)return n}
-  return 1; /* просто широкое фото */
+  return 1;
 }
-const NAI_FRAMES={}; /* ленты, нарезанные на кадры попиксельно */
+const NAI_FRAMES={};
 const loadImg=src=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=src});
 function sliceFrames(im,f){
   const w=Math.round(im.naturalWidth/f),h=im.naturalHeight,out=[];
@@ -677,7 +661,7 @@ async function naiFetch(v){
   try{
     const cached=sessionStorage.getItem('nai-'+v);
     if(cached){const c=JSON.parse(cached);
-      if(Date.now()-c.t<6e5)return c.d; /* кэш живёт 10 минут */}
+      if(Date.now()-c.t<6e5)return c.d;
     const r=await fetch(`https://api.github.com/repos/${NAI_REPO}/contents/nai/${v}`);
     if(!r.ok)throw new Error('api '+r.status);
     const files=await r.json();
@@ -693,7 +677,6 @@ async function naiFetch(v){
     if(out.length)sessionStorage.setItem('nai-'+v,JSON.stringify({t:Date.now(),d:out}));
     return out;
   }catch(e){
-    /* запасной вариант: старые встроенные данные, если API недоступен */
     return (typeof NAI_STYLES!=='undefined'&&NAI_STYLES[v])||[];
   }
 }
@@ -758,12 +741,10 @@ function toggleDD(id,e){e.stopPropagation();
 function closeDDs(){document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'))}
 document.addEventListener('click',closeDDs);
 
-/* header: stronger glass on scroll */
 const hdr=document.getElementById('hdr');let ticking=false;
 addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{
   hdr.classList.toggle('scrolled',scrollY>40);ticking=false});ticking=true}},{passive:true});
 
-/* subtle hero parallax on mouse move (±10px) */
 const hv=document.getElementById('heroVisual');let mx=0,my=0,raf=null;
 addEventListener('mousemove',e=>{
   mx=(e.clientX/innerWidth-.5)*20;my=(e.clientY/innerHeight-.5)*14;
@@ -771,12 +752,10 @@ addEventListener('mousemove',e=>{
     hv.style.transform=`translate(${mx*.5}px,${my*.5}px)`;raf=null});
 },{passive:true});
 
-/* scroll reveal */
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
-/* restore prefs */
 let pal=localStorage.getItem('pg-palette');
 if(pal==='violet')pal='immortal';
 if(pal)setPalette(pal);
