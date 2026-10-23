@@ -454,7 +454,7 @@ footer .fine b{color:var(--acc);font-weight:500}
 /* ================= DATA ================= */
 const T = {
 ru:{
-  nav:["Пресеты","Плагины","Темы","Стили NovelAI","Обо мне"],
+  nav:["Пресеты","Плагины","Темы","Стили NovelAI","Гайд","Обо мне"],
   badge:"Для TavoAI от @floryhibi",
   title:"FloryHibi",
   sub:"Мои плагины, темы, пресеты для TavoAI.",
@@ -497,7 +497,7 @@ ru:{
   footer:"Сделано с ♥ · FloryHibi"
 },
 en:{
-  nav:["Presets","Plugins","Themes","NovelAI Styles","About"],
+  nav:["Presets","Plugins","Themes","NovelAI Styles","Guide","About"],
   badge:"For TavoAI by @floryhibi",
   title:"FloryHibi",
   sub:"My plugins, themes, presets for TavoAI.",
@@ -540,7 +540,7 @@ en:{
   footer:"Made with ♥ · FloryHibi"
 },
 zh:{
-  nav:["预设","插件","主题","NovelAI 风格","关于"],
+  nav:["预设","插件","主题","NovelAI 风格","指南","关于"],
   badge:"TavoAI 专用 · @floryhibi 制作",
   title:"FloryHibi",
   sub:"我的 TavoAI 插件、主题与预设。",
@@ -583,7 +583,7 @@ zh:{
 }};
 
 /* ================= LOGIC ================= */
-const hrefs=['#presets','#plugins','#themes','#styles','#about'];
+const hrefs=['#presets','#plugins','#themes','#styles','guide.html','#about'];
 const DISCORD='https://discord.gg/pGM9GsRudQ';
 let lang=localStorage.getItem('pg-lang')||'ru';
 
@@ -612,7 +612,7 @@ function render(){
   const navHtml=t.nav.map((n,i)=>`<a href="${hrefs[i]}">${n}</a>`).join('');
   document.getElementById('nav').innerHTML=navHtml;
   document.getElementById('navFooter').innerHTML=navHtml+`<a href="${DISCORD}" target="_blank" rel="noopener">Discord</a>`;
-  document.getElementById('navDD').innerHTML=t.nav.map((n,i)=>`<button onclick="location.hash='${hrefs[i]}';closeDDs()">${n}</button>`).join('');
+  document.getElementById('navDD').innerHTML=t.nav.map((n,i)=>`<button onclick="location.href='${hrefs[i]}';closeDDs()">${n}</button>`).join('');
   document.querySelectorAll('[data-i]').forEach(el=>{if(t[el.dataset.i])el.innerHTML=t[el.dataset.i]});
   document.getElementById('presetGrid').innerHTML=t.presets.map(x=>card(x,t.dl,t.dev)).join('');
   document.getElementById('pluginGrid').innerHTML=t.plugins.map(x=>card(x,t.dl,t.dev)).join('');

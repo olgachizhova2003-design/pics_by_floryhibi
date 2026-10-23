@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Гайд по TavoAI для новичков · FloryHibi</title>
+<meta name="description" content="Пошаговый гайд по TavoAI для новичков: провайдер и ключ, персона, боты, пресеты, регексы, лорбуки, память, картинки и плагины.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;600&display=swap" rel="stylesheet">
+</head><body data-palette="peony">
+
+<style>
+/* Layout: sticky top bar (brand + language), chapter rail on the left, one chapter at a time; screenshots carry numbered pins with arrows */
+body[data-palette="peony"]{--acc:#d9759b;--acc2:#e89bb8;--acc3:#f3c6d6;--deep:#8d4a63}
+body[data-palette="jade"]{--acc:#4c9b7f;--acc2:#6fb89d;--acc3:#c4e2d4;--deep:#2f6b54}
+body[data-palette="immortal"]{--acc:#b78a4e;--acc2:#d4af74;--acc3:#eedcb9;--deep:#7a2e3f}
+body.dark[data-palette="peony"]{--acc:#c97898;--acc2:#e0a0ba;--acc3:#5a3346;--deep:#e0a0ba}
+body.dark[data-palette="jade"]{--acc:#6fbf9f;--acc2:#8fd4ba;--acc3:#2c4a3e;--deep:#8fd4ba}
+body.dark[data-palette="immortal"]{--acc:#cfa465;--acc2:#e2c48d;--acc3:#4d3a24;--deep:#e2c48d}
+body{--bg:#fcf7f9;--bg2:#f5e4ea;--surface:rgba(255,255,255,.55);--solid:#fff;--line:rgba(141,74,99,.16);
+  --text:#432533;--muted:#9a7281;--accent-ink:#fff;color-scheme:light}
+body.dark{--bg:#171215;--bg2:#21191e;--surface:rgba(48,32,39,.55);--solid:#241a20;--line:rgba(255,255,255,.1);
+  --text:#f2dde5;--muted:#c39fae;--accent-ink:#1a0f14;color-scheme:dark}
+body{--ink:var(--text);--accent:var(--acc);--lilac:var(--deep);
+  --tip:color-mix(in srgb,var(--acc3) 30%,var(--solid));
+  --alert:color-mix(in srgb,#e0567a 10%,var(--solid));--alert-line:color-mix(in srgb,#e0567a 40%,transparent);
+  --code:color-mix(in srgb,var(--acc) 10%,var(--solid));
+  --display:"Cormorant Garamond","Noto Sans SC",serif;
+  --body:"Inter","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body);
+  background-image:radial-gradient(60rem 30rem at 100% -10%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%),
+  radial-gradient(40rem 30rem at -10% 110%,color-mix(in srgb,var(--lilac) 12%,transparent),transparent 70%);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--lilac);outline-offset:2px;border-radius:6px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+.top .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;flex-direction:column;min-width:0;flex:1}
+.brand h1{font:700 clamp(17px,2.4vw,22px)/1.2 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.brand h1 em{font-style:normal;color:var(--accent)}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.langs-old{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.langs button{border:0;background:none;color:var(--muted);font:600 13px var(--body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.langs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;
+  padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 92px);align-self:start;display:flex;flex-direction:column;gap:2px}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:8px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:500;font-size:15px}
+.toc a .n{font:500 11px var(--display);color:var(--muted);font-variant-numeric:tabular-nums}
+.toc a:hover{background:var(--surface)}
+.toc a[aria-current="true"]{background:var(--solid);box-shadow:0 1px 0 var(--line),0 6px 18px -10px color-mix(in srgb,var(--accent) 50%,transparent);color:var(--accent)}
+.toc a[aria-current="true"] .n{color:var(--accent)}
+main{min-width:0}
+.chap{max-width:780px}
+.eyebrow{margin:0 0 6px;font:500 12px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--lilac)}
+.chap h2{font:700 clamp(26px,4vw,38px)/1.15 var(--display);margin:0 0 18px;letter-spacing:-.02em;text-wrap:balance}
+.chap h3{font:700 18px/1.3 var(--display);margin:34px 0 10px;text-wrap:balance}
+.lead{font-size:18px;line-height:1.55;max-width:65ch}
+.chap p,.chap li{max-width:68ch}
+.steps{counter-reset:s;list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{counter-increment:s;position:relative;padding-left:42px;min-height:28px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;
+  background:var(--accent);color:var(--accent-ink);font:700 13px var(--display)}
+.kv{padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.kv li::marker{color:var(--accent)}
+.shot{margin:18px 0 6px}
+.zoom{position:relative;display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:14px;overflow:visible;cursor:zoom-in;background:var(--solid);
+  box-shadow:0 18px 40px -26px color-mix(in srgb,var(--accent) 60%,transparent)}
+.zoom img{display:block;width:100%;height:auto;border-radius:13px}
+.shot.small{max-width:380px;margin-inline:auto}
+.shot.tall{max-width:330px;margin-inline:auto}
+.pair .shot.tall{max-width:330px;width:100%}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:16px;align-items:start}
+.pair .shot{margin:10px 0}
+.cap{color:var(--muted);font-size:14.5px;margin-top:6px}
+/* pins */
+.pin{position:absolute;width:0;height:0;pointer-events:none}
+.pin i{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;border:3px solid var(--accent);
+  background:color-mix(in srgb,var(--accent) 25%,transparent);animation:pulse 2s ease-out infinite}
+.pin b{position:absolute;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);
+  font:700 13px var(--display);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.pin::after{content:"";position:absolute;height:3px;background:var(--accent);border-radius:2px}
+.pin.r b{left:38px;top:-14px}.pin.r::after{left:9px;top:-1.5px;width:30px}
+.pin.l b{left:-66px;top:-14px}.pin.l::after{left:-39px;top:-1.5px;width:30px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+@media (prefers-reduced-motion:reduce){.pin i{animation:none}}
+@media (max-width:560px){.pin b{width:22px;height:22px;font-size:11px;top:-11px!important}.pin.r b{left:28px}.pin.l b{left:-50px}.pin.r::after{width:20px}.pin.l::after{left:-29px;width:20px}}
+/* boxes */
+.provs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px;margin:18px 0}
+.prov{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.prov-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.prov-h b{font:700 16px var(--display)}
+.tag{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--lilac) 16%,transparent);color:var(--lilac)}
+.prov-u{font-size:14px;margin-top:2px}
+.prov p{margin:8px 0 0;font-size:15px}
+.alert,.tip{border-radius:14px;padding:14px 16px;margin:18px 0;max-width:68ch}
+.alert{background:var(--alert);border:1px solid var(--alert-line)}
+.tip{background:var(--tip);border:1px solid color-mix(in srgb,var(--lilac) 30%,transparent)}
+.note{font-size:14.5px;color:var(--muted)}
+code{font-family:var(--mono);font-size:.9em;background:var(--code);padding:1px 6px;border-radius:5px;overflow-wrap:anywhere}
+.ex{font:14px/1.6 var(--mono);background:var(--code);border-radius:12px;padding:14px 16px;white-space:pre-wrap;max-width:68ch;overflow-x:auto}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chips a{padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);text-decoration:none;font-size:14px}
+.ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;margin:16px 0}
+.ba>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.lbl{display:block;font:500 11px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.plaque{display:inline-block;padding:8px 14px;border-radius:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 22%,var(--solid)),color-mix(in srgb,var(--lilac) 22%,var(--solid)));
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-weight:600;font-size:14px}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:44px}
+.pg{display:flex;flex-direction:column;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-decoration:none;color:var(--ink);font-weight:600}
+.pg small{color:var(--muted);font-weight:500;font-size:12px}
+.pg.next{text-align:right}
+.pg:hover{border-color:var(--accent)}
+footer{color:var(--muted);font-size:13px;margin-top:28px}
+.lb{position:fixed;inset:0;z-index:20;background:rgba(20,8,14,.82);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+.lb .zoom{max-width:min(1400px,100%);cursor:zoom-out;box-shadow:none}
+@media (max-width:860px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:14px 48px}
+  .toc{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px;scrollbar-width:none}
+  .toc a{flex:none;border:1px solid var(--line);background:var(--surface);font-size:14px;padding:6px 12px}
+  .lead{font-size:17px}
+}
+
+/* ---- site look ---- */
+body{transition:background .4s,color .4s;background-image:
+  radial-gradient(1000px 600px at 85% -5%,color-mix(in srgb,var(--acc) 12%,transparent),transparent 60%),
+  radial-gradient(800px 500px at -10% 40%,color-mix(in srgb,var(--acc2) 9%,transparent),transparent 60%),
+  linear-gradient(var(--bg),var(--bg2));background-attachment:fixed;margin:0}
+.chap h2{font-weight:600;font-size:clamp(34px,5vw,52px);line-height:1.05;letter-spacing:0;color:var(--deep)}
+.chap h3{font-weight:600;font-size:25px;color:var(--deep)}
+.eyebrow,.lbl{font-family:var(--body);letter-spacing:2.5px;font-size:11px;color:var(--acc)}
+.toc a .n{font-family:var(--display);font-size:15px;font-style:italic}
+.steps li::before,.pin b{font-family:var(--body);font-weight:600}
+.prov-h b{font-size:21px;font-weight:600}
+.tag{background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--deep)}
+.prov,.ba>div,.pg,.zoom{border-radius:18px}
+.pg:hover,.chips a:hover{border-color:var(--acc)}
+.top{background:color-mix(in srgb,var(--bg) 78%,transparent)}
+.top .in{max-width:1280px;padding-block:0;height:74px;flex-wrap:nowrap}
+.logo{display:flex;flex-direction:column;line-height:1;text-decoration:none;flex:none}
+.logo .lg{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:27px;color:var(--deep);letter-spacing:.5px}
+.logo small{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.brand{align-items:center;text-align:center}
+.brand h1{font:600 clamp(18px,2.4vw,26px)/1.1 var(--display);color:var(--text)}
+.brand h1 em{font-style:italic}
+.brand p{font-size:12px}
+.tools{display:flex;align-items:center;gap:8px;flex:none}
+.dd{position:relative}
+.dd-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font:13px var(--body);
+  background:var(--surface);color:var(--text);cursor:pointer}
+.dd-btn:hover{border-color:var(--acc)}
+.sw{width:13px;height:13px;border-radius:50%;display:inline-block}
+.sw-peony{background:linear-gradient(135deg,#d9759b,#f3c6d6)}.sw-jade{background:linear-gradient(135deg,#4c9b7f,#c4e2d4)}.sw-immortal{background:linear-gradient(135deg,#b78a4e,#eedcb9)}
+.dd-menu{position:absolute;top:calc(100% + 10px);right:0;min-width:160px;background:var(--solid);border:1px solid var(--line);border-radius:16px;padding:6px;display:none;
+  box-shadow:0 20px 60px rgba(0,0,0,.15);z-index:200}
+.dd-menu.open{display:block}
+.dd-menu button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;color:var(--text);padding:9px 12px;border-radius:10px;font:14px var(--body);text-align:left;cursor:pointer}
+.dd-menu button:hover{background:color-mix(in srgb,var(--acc) 12%,transparent)}
+.dd-menu button.on{color:var(--acc);font-weight:600}
+.theme-pill{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.theme-pill button{border:0;background:transparent;padding:7px 12px;font-size:14px;color:var(--muted);cursor:pointer}
+.theme-pill button.on{background:var(--text);color:var(--bg)}
+.home{font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text);opacity:.72;text-decoration:none;margin-right:6px;white-space:nowrap}
+.home:hover{opacity:1;color:var(--acc)}
+.toc{top:96px}
+@media (max-width:860px){.brand{display:none}.top .in{justify-content:space-between}.home{display:none}}
+@media (max-width:420px){#palName{display:none}.logo .lg{font-size:23px}}
+</style>
+
+<header class="top"><div class="in">
+  <a class="logo" href="./"><span class="lg">FloryHibi</span><small>for TavoAI</small></a>
+  <div class="brand"><h1 id="t"></h1><p id="s"></p></div>
+  <div class="tools">
+    <a class="home" id="home" href="./"></a>
+    <div class="dd"><button class="dd-btn" type="button" onclick="toggleDD('palDD',event)"><span class="sw sw-peony" id="palSw"></span><span id="palName">Peony</span>▾</button>
+      <div class="dd-menu" id="palDD">
+        <button type="button" data-p="peony" onclick="setPalette('peony')"><span class="sw sw-peony"></span>🌸 Peony</button>
+        <button type="button" data-p="jade" onclick="setPalette('jade')"><span class="sw sw-jade"></span>🌿 Jade</button>
+        <button type="button" data-p="immortal" onclick="setPalette('immortal')"><span class="sw sw-immortal"></span>🌙 Immortal</button>
+      </div></div>
+    <div class="dd"><button class="dd-btn" type="button" onclick="toggleDD('langDD',event)"><span id="langName">RU</span>▾</button>
+      <div class="dd-menu langs" id="langDD">
+        <button type="button" data-set="ru">Русский</button><button type="button" data-set="en">English</button><button type="button" data-set="zh">中文</button>
+      </div></div>
+    <div class="theme-pill"><button type="button" id="tLight" class="on" onclick="setTheme(false)" aria-label="Light">☼</button><button type="button" id="tDark" onclick="setTheme(true)" aria-label="Dark">☾</button></div>
+  </div>
+</div></header>
+<div class="wrap">
+  <div><nav class="toc" data-l="ru" aria-label="Главы" hidden><a href="#start" data-id="start"><span class="n">01</span>Первый запуск</a><a href="#api" data-id="api"><span class="n">02</span>Провайдер и ключ</a><a href="#model" data-id="model"><span class="n">03</span>Настройки модели</a><a href="#persona" data-id="persona"><span class="n">04</span>Персона</a><a href="#bots" data-id="bots"><span class="n">05</span>Где брать ботов</a><a href="#presets" data-id="presets"><span class="n">06</span>Пресеты</a><a href="#regex" data-id="regex"><span class="n">07</span>Регексы</a><a href="#lore" data-id="lore"><span class="n">08</span>Лорбуки</a><a href="#summary" data-id="summary"><span class="n">09</span>Summary (память)</a><a href="#images" data-id="images"><span class="n">10</span>Картинки</a><a href="#plugins" data-id="plugins"><span class="n">11</span>Плагины</a></nav><nav class="toc" data-l="en" aria-label="Chapters" hidden><a href="#start" data-id="start"><span class="n">01</span>First launch</a><a href="#api" data-id="api"><span class="n">02</span>Provider & key</a><a href="#model" data-id="model"><span class="n">03</span>Model settings</a><a href="#persona" data-id="persona"><span class="n">04</span>Persona</a><a href="#bots" data-id="bots"><span class="n">05</span>Finding bots</a><a href="#presets" data-id="presets"><span class="n">06</span>Presets</a><a href="#regex" data-id="regex"><span class="n">07</span>Regexes</a><a href="#lore" data-id="lore"><span class="n">08</span>Lorebooks</a><a href="#summary" data-id="summary"><span class="n">09</span>Summary (memory)</a><a href="#images" data-id="images"><span class="n">10</span>Images</a><a href="#plugins" data-id="plugins"><span class="n">11</span>Plugins</a></nav><nav class="toc" data-l="zh" aria-label="章节" hidden><a href="#start" data-id="start"><span class="n">01</span>首次启动</a><a href="#api" data-id="api"><span class="n">02</span>服务商与密钥</a><a href="#model" data-id="model"><span class="n">03</span>模型设置</a><a href="#persona" data-id="persona"><span class="n">04</span>人设</a><a href="#bots" data-id="bots"><span class="n">05</span>角色卡下载</a><a href="#presets" data-id="presets"><span class="n">06</span>预设</a><a href="#regex" data-id="regex"><span class="n">07</span>正则</a><a href="#lore" data-id="lore"><span class="n">08</span>世界书</a><a href="#summary" data-id="summary"><span class="n">09</span>总结（记忆）</a><a href="#images" data-id="images"><span class="n">10</span>生图</a><a href="#plugins" data-id="plugins"><span class="n">11</span>插件</a></nav></div>
+  <main><section class="chap" data-l="ru" data-id="start" lang="ru" hidden><p class="eyebrow">Глава 1 / 11</p><h2>Первый запуск</h2><p class="lead">Вы скачали TavoAI и видите пустое приложение. Это нормально: Таво — это «оболочка». Модели, ботов и пресеты вы подключаете сами. Ниже — порядок, в котором это удобнее всего делать.</p>
+<ol class="steps">
+<li><b>Подключите модель</b> — купите ключ у провайдера и добавьте его в <i>API connections</i>. Без этого бот не ответит ни слова.</li>
+<li><b>Заполните персону</b> — кто вы в ролевой.</li>
+<li><b>Скачайте бота</b> (персонажа) и импортируйте его.</li>
+<li><b>Поставьте пресет</b> и его регексы — они отвечают за стиль и качество ответов.</li>
+<li><b>По желанию</b>: Summary (долгая память), генерация картинок, плагины.</li>
+</ol>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-more" width="1080" height="2259" alt="" loading="lazy"></button></figure>
+<p class="cap">Меню Таво (на телефоне — раздел More). ① API connections — подключение моделей. ② Presets, Lorebooks, Regex — всё, что влияет на ответы. ③ Long-term memory — это и есть Summary.</p><div class="pager"><span></span><a class="pg next" href="#api"><small>Дальше</small>Провайдер и ключ</a></div></section><section class="chap" data-l="ru" data-id="api" lang="ru" hidden><p class="eyebrow">Глава 2 / 11</p><h2>Провайдер и ключ</h2><p class="lead">Провайдер продаёт доступ к моделям (Claude, Gemini, GPT, DeepSeek и другим). Вы платите ему, получаете <b>API-ключ</b> и вставляете его в Таво.</p>
+<p>Есть два типа оплаты. <b>Подписка</b>: фиксированная сумма в месяц. <b>PayAsYouGo</b>: платите за каждое сообщение, сколько наролили — столько и списали.</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>LiteRouter</b><span class="tag">подписка</span></div><div class="prov-u"><a href="https://literouter.com/" target="_blank" rel="noopener">literouter.com</a></div><p>Один из самых дешёвых провайдеров, подписки разные. Чем дешевле подписка, тем глупее модель (по наблюдениям автора гайда). Из России — только через посредника.</p></div>
+<div class="prov"><div class="prov-h"><b>OpenRouter</b><span class="tag">PayAsYouGo</span></div><div class="prov-u"><a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a></div><p>Доступ к официальным моделям. Очень дорого, подписок нет: ролишь — платишь. Без посредника не оплатить.</p></div>
+<div class="prov"><div class="prov-h"><b>Rout.My</b><span class="tag">подписка</span></div><div class="prov-u"><a href="https://rout.my/" target="_blank" rel="noopener">rout.my</a></div><p>Качество моделей близко к OpenRouter. Подписка с Opus стоит 4900 — дорого. В последнее время провайдер иногда лежал.</p></div>
+<div class="prov"><div class="prov-h"><b>ElectronHub</b><span class="tag">подписка + PayAsYouGo</span></div><div class="prov-u"><a href="https://www.electronhub.ai/" target="_blank" rel="noopener">electronhub.ai</a></div><p>Есть оба варианта оплаты. Автор гайда сама не пользовалась, но его хвалят: ложится редко, качество моделей хорошее, подписки дороговаты.</p></div>
+</div>
+<div class="alert"><b>OpenRouter и VPN.</b> Если вы из России, заходите на сайт OpenRouter и ролите в Таво <b>только с включённым VPN</b>. Зайдёте без VPN — получите бан, и деньги никто не вернёт.</div>
+<p class="note">Если вы из России, для оплаты почти всех провайдеров нужен посредник: российские карты они не принимают.</p>
+<h3>Как добавить ключ в Таво</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-api" width="1080" height="2252" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-create" width="1080" height="1077" alt="" loading="lazy"></button></figure></div>
+<p class="cap">API connections → кнопка <b>Create</b> в правом верхнем углу. Выберите <b>New API connection</b>. Router нужен, только если хотите объединить несколько подключений.</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-platforms" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-new" width="1080" height="2255" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Для OpenRouter есть готовая платформа в списке. Для LiteRouter, Rout.My, ElectronHub и большинства других выбирайте один из вариантов <b>Custom</b>. Чаще всего подходит <b>Custom (OpenAI-compatible)</b>; если провайдер в инструкции пишет Anthropic- или Gemini-compatible, берите его.</p>
+<p class="cap">⑤ <b>API base URL</b> — адрес из личного кабинета провайдера (обычно заканчивается на <code>/v1</code>). ⑥ <b>API key</b> — ваш ключ. ⑦ <b>Model</b> — список подтянется сам, выберите модель. ⑧ <b>Save</b>.</p>
+<p class="note">Никому не показывайте свой ключ и не выкладывайте скриншоты с ним: по нему можно потратить ваши деньги.</p><div class="pager"><a class="pg prev" href="#start"><small>Назад</small>Первый запуск</a><a class="pg next" href="#model"><small>Дальше</small>Настройки модели</a></div></section><section class="chap" data-l="ru" data-id="model" lang="ru" hidden><p class="eyebrow">Глава 3 / 11</p><h2>Настройки модели</h2><p class="lead">У каждого подключения есть свои параметры генерации. Откройте подключение в API connections и нажмите шестерёнку в правом верхнем углу.</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-edit" width="1080" height="2195" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-params" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Слева — шестерёнка в Edit API (ключ замазан). Справа — API Parameters: здесь настройки автора гайда для Claude Opus.</p>
+<ul class="kv">
+<li><b>Temperature</b> — «креативность». Ниже — предсказуемо и по сценарию, выше — фантазийно, но больше бреда.</li>
+<li><b>Top-P</b> — насколько разнообразны варианты, из которых модель выбирает слова.</li>
+<li><b>Frequency penalty</b> — штраф за повтор слов. Выше — богаче лексика, меньше одинаковых фраз.</li>
+<li><b>Presence penalty</b> — выше значит модель охотнее уходит в новые темы вместо того, чтобы крутиться вокруг одной.</li>
+</ul>
+<div class="tip"><b>Что важнее.</b> Параметры подключения перекрывают глобальные (<i>Model settings</i> в меню). Если здесь ничего не задано, берутся глобальные. Хороший пресет обычно сам подсказывает значения.</div>
+<p class="note">В глобальных Model settings также есть <b>Memory</b> — сколько последних сообщений видит модель (больше — лучше помнит, но дороже), и <b>Max response tokens</b> — максимальная длина ответа (слишком мало — ответ оборвётся).</p><div class="pager"><a class="pg prev" href="#api"><small>Назад</small>Провайдер и ключ</a><a class="pg next" href="#persona"><small>Дальше</small>Персона</a></div></section><section class="chap" data-l="ru" data-id="persona" lang="ru" hidden><p class="eyebrow">Глава 4 / 11</p><h2>Персона</h2><p class="lead">Персона — это вы в ролевой. Бот читает её, чтобы знать, к кому обращается: имя, внешность, характер, роль в сюжете.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-personas" width="1080" height="2248" alt="" loading="lazy"></button></figure>
+<p class="cap">Personas → <b>Create</b>. Персон может быть много — под разные истории. Отметка <i>Default</i> показывает, какая включена.</p>
+<h3>Как заполнить</h3>
+<ul class="kv">
+<li><b>Имя и возраст.</b> Бот будет обращаться к вам по имени.</li>
+<li><b>Внешность.</b> Рост, волосы, глаза, стиль одежды — 2–4 предложения, без романа.</li>
+<li><b>Характер.</b> Пара ключевых черт и как вы обычно себя ведёте.</li>
+<li><b>Роль в сюжете.</b> Кто вы этому персонажу: студентка, соседка, коллега. Удобно делать отдельную персону под каждого бота.</li>
+</ul>
+<div class="tip"><b>Пишите персону на английском</b>, даже если ролите на русском: английский текст занимает меньше токенов, а значит каждое сообщение дешевле.</div>
+<pre class="ex">Name: Es Flory.
+Age: 22.
+Date of birth: October 8.
+Zodiac sign: Libra.
+Nationality: Russian-Japanese.
+Place of birth: Saint Petersburg, Russia.
+Place of residence: Suburbs.
+Profession: 4th-year university student (Architecture and Design) + owner of a small pet supplies store.
+Scent: jasmine + peach.
+
+• Personality: Ambitious + relaxed but attentive + charismatic + elegant + LOVES children and gets along extremely well with teenagers + friendly + gentle + strategically minded + devoted to her work + radiates softness and confidence + knows how to support and encourage others + never gives up + mysterious + workaholic + warm and open + knows how to joke and create a cozy atmosphere in conversation + highly perceptive of other people's moods + notices small details + capable of calculating the consequences of her decisions + independent + patient + can become sharp and cold when she is underestimated, used, or controlled + does not tolerate violations of her personal boundaries.
+
+Appearance: Height: 168 cm + weight: 63 kg + plump, soft, feminine, yet toned body + long legs + narrow waist + firm, rounded hips + large but proportionate breasts + well-groomed, very pale skin with a natural glow + green almond-shaped eyes + large, expressive green eyes + very long hair reaching below her waist + slightly wavy hair with some naturally curling strands + babypink hair, a delicate pastel-pink shade with richer pink highlights + hair is thick, soft, airy, and voluminous + a small beauty mark above her right eyebrow + heart-shaped face + full lips + expressive eyebrows + the energy of a calm, confident, and envelopingly gentle woman + makeup focused on glowing skin, a soft blush, expressive eyelashes, and natural pink lips.</pre><div class="pager"><a class="pg prev" href="#model"><small>Назад</small>Настройки модели</a><a class="pg next" href="#bots"><small>Дальше</small>Где брать ботов</a></div></section><section class="chap" data-l="ru" data-id="bots" lang="ru" hidden><p class="eyebrow">Глава 5 / 11</p><h2>Где брать ботов</h2><p class="lead">Бот (персонаж, карточка) — это файл PNG или JSON с описанием героя, первым сообщением и иногда лорбуком.</p>
+<h3>Где искать</h3>
+<ul class="kv">
+<li><b><a href="https://janitorai.com/" target="_blank" rel="noopener">janitorai.com</a></b> — огромный выбор, но качество очень разное: роза среди навоза. Скачивать оттуда нужно через datacat (ниже).</li>
+<li><b>Telegram-каналы ботоделов.</b> Боты этих авторов — с очень длинными и живыми ролевыми:
+<div class="chips"><a href="https://t.me/SinnersBasement" target="_blank" rel="noopener">t.me/SinnersBasement</a> <a href="https://t.me/murxaibot" target="_blank" rel="noopener">t.me/murxaibot</a> <a href="https://t.me/chromek1djai" target="_blank" rel="noopener">t.me/chromek1djai</a></div></li>
+</ul>
+<h3>Как скачать бота с JanitorAI</h3>
+<ol class="steps">
+<li>Откройте <a href="https://datacat.run/fresh" target="_blank" rel="noopener">datacat.run/fresh</a>.</li>
+<li>В меню <b>Characters</b> нажмите <b>Explore Characters</b> и введите имя бота.</li>
+<li>На странице бота нажмите <b>Download</b> и выберите <b>PNG</b> (или ZIP, если хотите сразу с лорбуками и скриптами).</li>
+</ol>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-1" width="502" height="468" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-2" width="569" height="650" alt="" loading="lazy"></button></figure></div>
+<h3>Как добавить в Таво</h3>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-chars" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Characters → <b>Create</b> → импорт файла. Скачанный PNG можно импортировать как есть — карточка зашита прямо в картинку.</p><div class="pager"><a class="pg prev" href="#persona"><small>Назад</small>Персона</a><a class="pg next" href="#presets"><small>Дальше</small>Пресеты</a></div></section><section class="chap" data-l="ru" data-id="presets" lang="ru" hidden><p class="eyebrow">Глава 6 / 11</p><h2>Пресеты</h2><p class="lead">Пресет — набор инструкций для модели: как писать, от чьего лица, какой длины, что можно и что нельзя. Один и тот же бот на разных пресетах звучит совершенно по-разному.</p>
+<div class="tip"><b>SillyTavern и Таво.</b> Пресеты из SillyTavern спокойно встают в Таво. А вот пресеты из Таво встают в SillyTavern не всегда.</div>
+<h3>Где искать</h3>
+<ul class="kv">
+<li><b>Официальный Discord TavoAI</b> — <a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>. Ветка <b>lorebook-presets-regex</b> — пресеты на английском, ветка <b>世界书-预设-正则分享</b> — на китайском. Всё сделано именно под Таво.</li>
+<li><b>Discord ✦AI Presets✦</b> — <a href="https://discord.gg/PpHrcJGVH" target="_blank" rel="noopener">discord.gg/PpHrcJGVH</a>. Раздел <b>presets</b>: пресеты на английском и русском, для Таво и SillyTavern, плюс промпты, расширения и гайды.</li>
+<li><b>Telegram-каналы русскоязычных креаторов.</b> Хвалят пресеты:
+<div class="chips"><a href="https://t.me/sillykamoi" target="_blank" rel="noopener">t.me/sillykamoi</a> <a href="https://t.me/ah_ah_shino4ka" target="_blank" rel="noopener">t.me/ah_ah_shino4ka</a></div>
+У sillykamoi есть отличный пресет под Claude и отдельный под GPT. Пресет Шино хорошо работает на Gemini.</li>
+</ul>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-tavo" width="409" height="455" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-aipresets" width="397" height="875" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Слева — нужные ветки в Discord TavoAI. Справа — раздел presets в ✦AI Presets✦.</p>
+<h3>Как понять, какой пресет вам подходит</h3>
+<ul class="kv">
+<li><b>Под какую модель он писался.</b> Пресет под Claude на Gemini может работать хуже, и наоборот. Автор обычно пишет это в описании.</li>
+<li><b>Язык.</b> Русский пресет обычно даёт более живой русский текст.</li>
+<li><b>Плашки или чистый текст.</b> Некоторые пресеты добавляют HTML-плашки (статусы, телефон, мысли). Красиво, но тратит токены. Если устали — берите пресет без них.</li>
+<li><b>Попробуйте на одном и том же боте.</b> Сыграйте 5–10 сообщений на двух пресетах и сравните — это быстрее любых обзоров.</li>
+</ul>
+<h3>Установка и тогглы</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-presets" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-preset-edit" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Presets → <b>Create</b> → импорт файла. Нажмите на пресет, чтобы открыть его. Внутри пресет разбит на тогглы. Переключатели включают и выключают отдельные тогглы (например, плашки или «мысли»). Карандаш — редактировать текст тоггла. Не забудьте <b>Save</b>.</p><div class="pager"><a class="pg prev" href="#bots"><small>Назад</small>Где брать ботов</a><a class="pg next" href="#regex"><small>Дальше</small>Регексы</a></div></section><section class="chap" data-l="ru" data-id="regex" lang="ru" hidden><p class="eyebrow">Глава 7 / 11</p><h2>Регексы</h2><p class="lead">Регекс (regex) — правило «найди и замени» для текста сообщений. Модель пишет служебный текст, а регекс превращает его в красивую плашку, прячет лишнее или чистит мусор.</p>
+<div class="ba"><div><span class="lbl">Модель написала</span><code>&lt;status&gt;Настроение: злится | Время: 23:10&lt;/status&gt;</code></div><div><span class="lbl">Вы видите</span><div class="plaque">Настроение: злится · 23:10</div></div></div>
+<ul class="kv">
+<li><b>Регексы идут в комплекте с пресетом.</b> Если пресет рисует плашки, автор почти всегда выкладывает рядом файл регексов. Без них вы увидите сырые теги.</li>
+<li><b>Импортируйте их вместе:</b> пресет — в Presets, регексы — в Regex.</li>
+<li><b>Не включайте регексы от разных пресетов одновременно</b> — они могут конфликтовать.</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-regex" width="1080" height="2256" alt="" loading="lazy"></button></figure>
+<p class="cap">Regex → <b>Create</b> → импорт. Группы регексов; откройте группу, чтобы включить или выключить отдельные правила.</p><div class="pager"><a class="pg prev" href="#presets"><small>Назад</small>Пресеты</a><a class="pg next" href="#lore"><small>Дальше</small>Лорбуки</a></div></section><section class="chap" data-l="ru" data-id="lore" lang="ru" hidden><p class="eyebrow">Глава 8 / 11</p><h2>Лорбуки</h2><p class="lead">Лорбук — справочник мира: места, второстепенные персонажи, правила магии. Записи подставляются в запрос, только когда в чате звучит их ключевое слово, поэтому не тратят контекст зря.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-lore" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Lorebooks → <b>Create</b> → импорт. Многие боты приходят со своим лорбуком — он подключится сам при импорте карточки.</p><div class="pager"><a class="pg prev" href="#regex"><small>Назад</small>Регексы</a><a class="pg next" href="#summary"><small>Дальше</small>Summary (память)</a></div></section><section class="chap" data-l="ru" data-id="summary" lang="ru" hidden><p class="eyebrow">Глава 9 / 11</p><h2>Summary (память)</h2><p class="lead">Модель видит только последние сообщения (см. Memory в настройках модели). Всё, что было раньше, она забывает. Summary — это краткий пересказ сюжета, который Таво пишет автоматически и подкладывает модели в каждый запрос.</p>
+<p>В Таво это раздел <b>Long-term memory</b>.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-memory" width="1080" height="2263" alt="" loading="lazy"></button></figure>
+<ul class="kv">
+<li><b>① Auto summarize</b> — каждые N сообщений Таво обновляет пересказ. 0 — выключено.</li>
+<li><b>② Memory limit</b> — сколько строк памяти хранить.</li>
+<li><b>③ Summary prompt</b> — инструкция, по которой пишется пересказ. Можно попросить писать по-русски и отмечать важные факты.</li>
+<li><b>④ Injection position / prompt</b> — куда и в каком виде пересказ вставляется в запрос.</li>
+</ul>
+<div class="tip"><b>Зачем это нужно.</b> В длинной ролевой без Summary бот забывает имена, обещания и события. С ним можно держать Memory поменьше и экономить, а сюжет не потеряется. Пересказ можно открыть в чате и поправить вручную.</div>
+<div class="alert"><b>ВАЖНО:</b> Summary можно не использовать вообще. На сайте <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a> есть плагины, которые собирают лорбук по вашему РП-чату. В этом случае Summary вы <b>выключаете</b> (Auto summarize = 0) и используете плагин.</div>
+<p class="note"><b>Dedicated API</b> вверху позволяет писать пересказ отдельной, более дешёвой моделью.</p><div class="pager"><a class="pg prev" href="#lore"><small>Назад</small>Лорбуки</a><a class="pg next" href="#images"><small>Дальше</small>Картинки</a></div></section><section class="chap" data-l="ru" data-id="images" lang="ru" hidden><p class="eyebrow">Глава 10 / 11</p><h2>Картинки</h2><p class="lead">Выбор тут большой. Ниже — три основные модели для картинок, как подключить их к ролевой и где брать стили.</p>
+<h3>Модели</h3>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NovelAI v4.5</b><span class="tag">аниме · 18+</span></div><div class="prov-u"></div><p>Аниме-модель, генерирует картинки 18+ без цензуры. Токен можно купить через <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> в Telegram. Референсы не поддерживает.</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI v5</b><span class="tag">аниме · 18+</span></div><div class="prov-u"></div><p>Тоже без цензуры, но новее: больше стилей, до 20 персонажей на одной картинке, умеет комиксы. Купить можно по гайду в <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">Telegram-чат @floryhibi</a> или на официальном сайте <a href="https://novelai.net/" target="_blank" rel="noopener">novelai.net/</a> (если вы не из России). Референсы не поддерживает.</p></div>
+<div class="prov"><div class="prov-h"><b>NanoBanana</b><span class="tag">реализм · digital art</span></div><div class="prov-u"></div><p>Умеет и в реализм, и в digital art. 18+ не генерирует. Поддерживает референсы — отлично подходит для РП без интим-сцен. Генерировать можно через <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> или через своего провайдера, если он даёт доступ к NanoBanana (например, LinkAPI или RoutMy).</p></div>
+</div>
+<figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="routmy-nb" width="1280" height="471" alt="" loading="lazy"></button></figure><figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="linkapi-nb" width="1280" height="389" alt="" loading="lazy"></button></figure>
+<p class="cap">Модели NanoBanana у провайдеров. Сверху — Rout.My: gemini-3.1-flash-image-preview, gemini-3-pro-image (подписка PLUS), gemini-3.1-flash-lite-image (BASIC). Снизу — витрина LinkAPI: gemini-3-pro-image, gemini-3.1-flash-image, gemini-nano-banana-2.1.</p>
+<h3>Как подключить к ролевой (если вы из России)</h3>
+<p>Вы получили токен или ключ. Дальше два варианта.</p>
+<p><b>Вариант 1 — промпт и регекс от @floryhibi</b></p>
+<ol class="steps">
+<li>Зайдите в <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">Telegram-чат @floryhibi</a>, откройте ветку <b>«Картинки»</b> и закреплённое сообщение.</li>
+<li>Там лежит промпт для пресета: он подходит для всех моделей генерации, плашка сама разберётся. Скачайте его.</li>
+<li>Откройте пресет, нажмите <b>Add</b>, вставьте скачанный промпт в поле и сохраните.</li>
+<li>Вернитесь к тому же закреплённому сообщению и скачайте <b>«Сцена by @floryhibi»</b>.</li>
+<li>В Tavo откройте <b>Regex</b> → <b>Import</b> и установите скачанный файл.</li>
+<li>Идите в чат с ботом и ролите. Появится плашка генерации картинок — введите нужные данные и нажмите <b>«Сгенерировать»</b>.</li>
+</ol>
+<p><b>Вариант 2 — плагин.</b> Найдите плагин для картинок на <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a>. За чужие плагины автор гайда не отвечает — у каждого автора свои инструкции.</p>
+<h3>Где брать стили</h3>
+<p>Стили для NanoBanana и NovelAI разные — выбирайте на свой вкус.</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NanoBanana</b></div><p><a href="https://ann22cadis.github.io/cadis-ai/" target="_blank" rel="noopener">Сайт Кадис</a> (<a href="https://t.me/cadis_ai" target="_blank" rel="noopener">t.me/cadis_ai</a>)<br><a href="https://moonnsy.github.io/moonnsypic/" target="_blank" rel="noopener">Сайт Мунси</a> (<a href="https://t.me/moonnsypic" target="_blank" rel="noopener">t.me/moonnsypic</a>)</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI</b></div><p><a href="https://floryhibi.ru/" target="_blank" rel="noopener">floryhibi.ru — стили для NovelAI v5 и v4.5</a><br><a href="https://t.me/+QxUHZWGQAx03Zjgy" target="_blank" rel="noopener">Telegram-канал Эсочки</a></p></div>
+</div><div class="pager"><a class="pg prev" href="#summary"><small>Назад</small>Summary (память)</a><a class="pg next" href="#plugins"><small>Дальше</small>Плагины</a></div></section><section class="chap" data-l="ru" data-id="plugins" lang="ru" hidden><p class="eyebrow">Глава 11 / 11</p><h2>Плагины</h2><p class="lead">Плагины добавляют в Таво новые функции: телефон внутри ролевой, дневник событий, трекеры, менеджер файлов и многое другое. Файлы плагинов имеют расширение <code>.tpg</code>.</p>
+<h3>Где скачивать</h3>
+<ul class="kv">
+<li><b>Tavo Hub</b> — <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">hub.tavoai.dev</a>. Главное и самое надёжное место.</li>
+<li><b>Telegram-каналы креаторов.</b> Большинство плагинов оттуда потом дублируются на Tavo Hub.</li>
+<li><b>Официальный Discord TavoAI</b> — <a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>, ветка <b>插件分享</b>.</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-plugins" width="1080" height="2082" alt="" loading="lazy"></button></figure>
+<p class="cap">Plugins → ① <b>Install</b> — установить скачанный <code>.tpg</code>. ② Баннер Tavo Plugin Hub ведёт в каталог. ③ Переключатель включает и выключает плагин; через ⋮ — настройки.</p>
+<p class="note">Ставьте плагины из проверенных источников: плагин работает внутри вашего приложения.</p><div class="pager"><a class="pg prev" href="#images"><small>Назад</small>Картинки</a><span></span></div></section><section class="chap" data-l="en" data-id="start" lang="en" hidden><p class="eyebrow">Chapter 1 / 11</p><h2>First launch</h2><p class="lead">You installed TavoAI and the app is empty. That's expected: Tavo is a shell. You bring the models, bots and presets yourself. Here is the order that works best.</p>
+<ol class="steps">
+<li><b>Connect a model</b>: buy a key from a provider and add it under <i>API connections</i>. Without it the bot can't reply at all.</li>
+<li><b>Fill in your persona</b>: who you are in the roleplay.</li>
+<li><b>Download a bot</b> (character) and import it.</li>
+<li><b>Install a preset</b> and its regexes. They control style and reply quality.</li>
+<li><b>Optional</b>: Summary (long-term memory), image generation, plugins.</li>
+</ol>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-more" width="1080" height="2259" alt="" loading="lazy"></button></figure>
+<p class="cap">Tavo's menu (on a phone it's under More). ① API connections: your models. ② Presets, Lorebooks, Regex: everything that shapes replies. ③ Long-term memory is the Summary.</p><div class="pager"><span></span><a class="pg next" href="#api"><small>Next</small>Provider & key</a></div></section><section class="chap" data-l="en" data-id="api" lang="en" hidden><p class="eyebrow">Chapter 2 / 11</p><h2>Provider & key</h2><p class="lead">A provider sells access to models (Claude, Gemini, GPT, DeepSeek and others). You pay them, get an <b>API key</b>, and paste it into Tavo.</p>
+<p>There are two ways to pay. A <b>subscription</b> is a fixed monthly price. <b>Pay-as-you-go</b> charges for every message you send.</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>LiteRouter</b><span class="tag">subscription</span></div><div class="prov-u"><a href="https://literouter.com/" target="_blank" rel="noopener">literouter.com</a></div><p>One of the cheapest providers, with several plans. In the author's experience, the cheaper the plan, the dumber the model. Paying from Russia needs a middleman.</p></div>
+<div class="prov"><div class="prov-h"><b>OpenRouter</b><span class="tag">pay-as-you-go</span></div><div class="prov-u"><a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a></div><p>Access to official models. Very expensive, no subscriptions: you pay for every reply. Can't be paid from Russia without a middleman.</p></div>
+<div class="prov"><div class="prov-h"><b>Rout.My</b><span class="tag">subscription</span></div><div class="prov-u"><a href="https://rout.my/" target="_blank" rel="noopener">rout.my</a></div><p>Model quality close to OpenRouter. The plan with Opus costs 4900 RUB, which is a lot. It has had outages recently.</p></div>
+<div class="prov"><div class="prov-h"><b>ElectronHub</b><span class="tag">subscription + pay-as-you-go</span></div><div class="prov-u"><a href="https://www.electronhub.ai/" target="_blank" rel="noopener">electronhub.ai</a></div><p>Offers both. The author hasn't used it herself, but people praise it: rarely down, good model quality, somewhat pricey plans.</p></div>
+</div>
+<div class="alert"><b>OpenRouter and VPN.</b> If you are in Russia, open the OpenRouter site and roleplay in Tavo <b>only with a VPN on</b>. Without it you can get banned, and nobody will refund your money.</div>
+<p class="note">From Russia, almost every provider needs a payment middleman, since Russian cards aren't accepted.</p>
+<h3>Adding your key to Tavo</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-api" width="1080" height="2252" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-create" width="1080" height="1077" alt="" loading="lazy"></button></figure></div>
+<p class="cap">API connections → the <b>Create</b> button at the top right. Choose <b>New API connection</b>. A router is only for combining several connections.</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-platforms" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-new" width="1080" height="2255" alt="" loading="lazy"></button></figure></div>
+<p class="cap">OpenRouter has its own entry in the list. For LiteRouter, Rout.My, ElectronHub and most others, pick one of the <b>Custom</b> options. Usually that's <b>Custom (OpenAI-compatible)</b>; if your provider's instructions say Anthropic- or Gemini-compatible, use that one.</p>
+<p class="cap">⑤ <b>API base URL</b>: the address from your provider's dashboard (usually ends in <code>/v1</code>). ⑥ <b>API key</b>: your key. ⑦ <b>Model</b>: the list loads by itself, pick one. ⑧ <b>Save</b>.</p>
+<p class="note">Never share your key or post screenshots that show it: anyone with it can spend your money.</p><div class="pager"><a class="pg prev" href="#start"><small>Back</small>First launch</a><a class="pg next" href="#model"><small>Next</small>Model settings</a></div></section><section class="chap" data-l="en" data-id="model" lang="en" hidden><p class="eyebrow">Chapter 3 / 11</p><h2>Model settings</h2><p class="lead">Every connection has its own generation parameters. Open the connection in API connections and tap the gear at the top right.</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-edit" width="1080" height="2195" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-params" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Left: the gear in Edit API (key hidden). Right: API Parameters, showing the author's settings for Claude Opus.</p>
+<ul class="kv">
+<li><b>Temperature</b>: creativity. Lower is predictable and on-script, higher is imaginative but drifts.</li>
+<li><b>Top-P</b>: how varied the word choices the model picks from are.</li>
+<li><b>Frequency penalty</b>: a penalty for repeating words. Higher means richer vocabulary and fewer repeated phrases.</li>
+<li><b>Presence penalty</b>: higher makes the model more willing to move to new topics instead of circling one.</li>
+</ul>
+<div class="tip"><b>Which wins.</b> Connection parameters override the global ones (<i>Model settings</i> in the menu). If nothing is set here, the global values apply. A good preset usually suggests values.</div>
+<p class="note">Global Model settings also hold <b>Memory</b>, how many recent messages the model sees (more recall, higher cost), and <b>Max response tokens</b>, the longest a reply can be (too low cuts replies off).</p><div class="pager"><a class="pg prev" href="#api"><small>Back</small>Provider & key</a><a class="pg next" href="#persona"><small>Next</small>Persona</a></div></section><section class="chap" data-l="en" data-id="persona" lang="en" hidden><p class="eyebrow">Chapter 4 / 11</p><h2>Persona</h2><p class="lead">A persona is you in the roleplay. The bot reads it to know who it's talking to: name, looks, personality, role in the story.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-personas" width="1080" height="2248" alt="" loading="lazy"></button></figure>
+<p class="cap">Personas → <b>Create</b>. You can keep many personas for different stories. <i>Default</i> marks the active one.</p>
+<h3>What to write</h3>
+<ul class="kv">
+<li><b>Name and age.</b> The bot will call you by name.</li>
+<li><b>Looks.</b> Height, hair, eyes, clothing style. Two to four sentences, not a novel.</li>
+<li><b>Personality.</b> A couple of key traits and how you usually act.</li>
+<li><b>Role in the story.</b> Who you are to this character: a student, a neighbour, a coworker. A separate persona per bot works well.</li>
+</ul>
+<div class="tip"><b>Write your persona in English</b>, even if you roleplay in another language: English text takes fewer tokens, so every message costs less.</div>
+<pre class="ex">Name: Es Flory.
+Age: 22.
+Date of birth: October 8.
+Zodiac sign: Libra.
+Nationality: Russian-Japanese.
+Place of birth: Saint Petersburg, Russia.
+Place of residence: Suburbs.
+Profession: 4th-year university student (Architecture and Design) + owner of a small pet supplies store.
+Scent: jasmine + peach.
+
+• Personality: Ambitious + relaxed but attentive + charismatic + elegant + LOVES children and gets along extremely well with teenagers + friendly + gentle + strategically minded + devoted to her work + radiates softness and confidence + knows how to support and encourage others + never gives up + mysterious + workaholic + warm and open + knows how to joke and create a cozy atmosphere in conversation + highly perceptive of other people's moods + notices small details + capable of calculating the consequences of her decisions + independent + patient + can become sharp and cold when she is underestimated, used, or controlled + does not tolerate violations of her personal boundaries.
+
+Appearance: Height: 168 cm + weight: 63 kg + plump, soft, feminine, yet toned body + long legs + narrow waist + firm, rounded hips + large but proportionate breasts + well-groomed, very pale skin with a natural glow + green almond-shaped eyes + large, expressive green eyes + very long hair reaching below her waist + slightly wavy hair with some naturally curling strands + babypink hair, a delicate pastel-pink shade with richer pink highlights + hair is thick, soft, airy, and voluminous + a small beauty mark above her right eyebrow + heart-shaped face + full lips + expressive eyebrows + the energy of a calm, confident, and envelopingly gentle woman + makeup focused on glowing skin, a soft blush, expressive eyelashes, and natural pink lips.</pre><div class="pager"><a class="pg prev" href="#model"><small>Back</small>Model settings</a><a class="pg next" href="#bots"><small>Next</small>Finding bots</a></div></section><section class="chap" data-l="en" data-id="bots" lang="en" hidden><p class="eyebrow">Chapter 5 / 11</p><h2>Finding bots</h2><p class="lead">A bot (character, card) is a PNG or JSON file with the character's description, a greeting and sometimes a lorebook.</p>
+<h3>Where to look</h3>
+<ul class="kv">
+<li><b><a href="https://janitorai.com/" target="_blank" rel="noopener">janitorai.com</a></b>: a huge catalogue of very uneven quality, a rose among the weeds. Download from it through datacat (below).</li>
+<li><b>Bot makers' Telegram channels.</b> Bots from these authors carry long, lively roleplays:
+<div class="chips"><a href="https://t.me/SinnersBasement" target="_blank" rel="noopener">t.me/SinnersBasement</a> <a href="https://t.me/murxaibot" target="_blank" rel="noopener">t.me/murxaibot</a> <a href="https://t.me/chromek1djai" target="_blank" rel="noopener">t.me/chromek1djai</a></div></li>
+</ul>
+<h3>Downloading a bot from JanitorAI</h3>
+<ol class="steps">
+<li>Open <a href="https://datacat.run/fresh" target="_blank" rel="noopener">datacat.run/fresh</a>.</li>
+<li>In the <b>Characters</b> menu click <b>Explore Characters</b> and type the bot's name.</li>
+<li>On the bot's page click <b>Download</b> and choose <b>PNG</b> (or ZIP to include lorebooks and scripts).</li>
+</ol>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-1" width="502" height="468" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-2" width="569" height="650" alt="" loading="lazy"></button></figure></div>
+<h3>Adding it to Tavo</h3>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-chars" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Characters → <b>Create</b> → import a file. The downloaded PNG imports as is, since the card is stored inside the image.</p><div class="pager"><a class="pg prev" href="#persona"><small>Back</small>Persona</a><a class="pg next" href="#presets"><small>Next</small>Presets</a></div></section><section class="chap" data-l="en" data-id="presets" lang="en" hidden><p class="eyebrow">Chapter 6 / 11</p><h2>Presets</h2><p class="lead">A preset is a set of instructions for the model: how to write, from whose point of view, how long, what's allowed. The same bot sounds completely different on different presets.</p>
+<div class="tip"><b>SillyTavern and Tavo.</b> SillyTavern presets work in Tavo without trouble. Tavo presets don't always work in SillyTavern.</div>
+<h3>Where to look</h3>
+<ul class="kv">
+<li><b>Official TavoAI Discord</b>: <a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>. The <b>lorebook-presets-regex</b> channel has English presets, <b>世界书-预设-正则分享</b> has Chinese ones. Everything there is made for Tavo.</li>
+<li><b>✦AI Presets✦ Discord</b>: <a href="https://discord.gg/PpHrcJGVH" target="_blank" rel="noopener">discord.gg/PpHrcJGVH</a>. The <b>presets</b> channel has English and Russian presets for Tavo and SillyTavern, plus prompts, extensions and guides.</li>
+<li><b>Russian creators on Telegram.</b> Well-liked presets:
+<div class="chips"><a href="https://t.me/sillykamoi" target="_blank" rel="noopener">t.me/sillykamoi</a> <a href="https://t.me/ah_ah_shino4ka" target="_blank" rel="noopener">t.me/ah_ah_shino4ka</a></div>
+sillykamoi has a great Claude preset and a separate one for GPT. Shino's preset works well on Gemini.</li>
+</ul>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-tavo" width="409" height="455" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-aipresets" width="397" height="875" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Left: the channels in the TavoAI Discord. Right: the presets channel in ✦AI Presets✦.</p>
+<h3>How to pick a preset</h3>
+<ul class="kv">
+<li><b>Which model it targets.</b> A Claude preset may do worse on Gemini, and the other way round. Authors usually say so in the description.</li>
+<li><b>Language.</b> A preset written in your language usually gives more natural prose in it.</li>
+<li><b>Panels or plain text.</b> Some presets add HTML panels (status, phone, thoughts). They look nice but cost tokens. If you're tired of them, use a preset without.</li>
+<li><b>Test on one bot.</b> Play 5–10 messages on two presets and compare. It's faster than any review.</li>
+</ul>
+<h3>Installing and toggles</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-presets" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-preset-edit" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Presets → <b>Create</b> → import a file. Click a preset to open it. A preset is split into toggles. The switches turn individual toggles on and off (panels, thoughts and so on). The pencil edits a toggle's text. Remember to press <b>Save</b>.</p><div class="pager"><a class="pg prev" href="#bots"><small>Back</small>Finding bots</a><a class="pg next" href="#regex"><small>Next</small>Regexes</a></div></section><section class="chap" data-l="en" data-id="regex" lang="en" hidden><p class="eyebrow">Chapter 7 / 11</p><h2>Regexes</h2><p class="lead">A regex is a find-and-replace rule for message text. The model writes tagged text, and the regex turns it into a styled panel, hides extras or cleans up junk.</p>
+<div class="ba"><div><span class="lbl">The model wrote</span><code>&lt;status&gt;Mood: angry | Time: 23:10&lt;/status&gt;</code></div><div><span class="lbl">You see</span><div class="plaque">Mood: angry · 23:10</div></div></div>
+<ul class="kv">
+<li><b>Regexes come with the preset.</b> If a preset draws panels, the author almost always posts a regex file next to it. Without it you'll see raw tags.</li>
+<li><b>Import both:</b> the preset into Presets, the regexes into Regex.</li>
+<li><b>Don't enable regexes from different presets at once.</b> They can clash.</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-regex" width="1080" height="2256" alt="" loading="lazy"></button></figure>
+<p class="cap">Regex → <b>Create</b> → import. Regex groups; open one to toggle individual rules.</p><div class="pager"><a class="pg prev" href="#presets"><small>Back</small>Presets</a><a class="pg next" href="#lore"><small>Next</small>Lorebooks</a></div></section><section class="chap" data-l="en" data-id="lore" lang="en" hidden><p class="eyebrow">Chapter 8 / 11</p><h2>Lorebooks</h2><p class="lead">A lorebook is the world's reference book: places, side characters, magic rules. Entries are added to the prompt only when their keyword comes up in chat, so they don't waste context.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-lore" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Lorebooks → <b>Create</b> → import. Many bots ship with their own lorebook, which attaches when you import the card.</p><div class="pager"><a class="pg prev" href="#regex"><small>Back</small>Regexes</a><a class="pg next" href="#summary"><small>Next</small>Summary (memory)</a></div></section><section class="chap" data-l="en" data-id="summary" lang="en" hidden><p class="eyebrow">Chapter 9 / 11</p><h2>Summary (memory)</h2><p class="lead">The model only sees the most recent messages (see Memory in model settings) and forgets everything before. Summary is a short recap of the story that Tavo writes automatically and adds to every request.</p>
+<p>In Tavo this lives under <b>Long-term memory</b>.</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-memory" width="1080" height="2263" alt="" loading="lazy"></button></figure>
+<ul class="kv">
+<li><b>① Auto summarize</b>: Tavo updates the recap every N messages. 0 turns it off.</li>
+<li><b>② Memory limit</b>: how many memory lines to keep.</li>
+<li><b>③ Summary prompt</b>: the instruction used to write the recap. You can ask for your language and for key facts to be noted.</li>
+<li><b>④ Injection position / prompt</b>: where and how the recap is inserted into the request.</li>
+</ul>
+<div class="tip"><b>Why it matters.</b> In a long roleplay without a summary, the bot forgets names, promises and events. With one, you can keep Memory lower and save money without losing the plot. You can open the recap in chat and edit it by hand.</div>
+<div class="alert"><b>IMPORTANT:</b> you don't have to use Summary at all. <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a> has plugins that build a lorebook from your roleplay chat. If you use one, turn Summary <b>off</b> (Auto summarize = 0) and let the plugin do the job.</div>
+<p class="note"><b>Dedicated API</b> at the top lets a separate, cheaper model write the recap.</p><div class="pager"><a class="pg prev" href="#lore"><small>Back</small>Lorebooks</a><a class="pg next" href="#images"><small>Next</small>Images</a></div></section><section class="chap" data-l="en" data-id="images" lang="en" hidden><p class="eyebrow">Chapter 10 / 11</p><h2>Images</h2><p class="lead">There are lots of options. Below are the three main image models, how to hook them into your roleplay, and where to find styles.</p>
+<h3>Models</h3>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NovelAI v4.5</b><span class="tag">anime · 18+</span></div><div class="prov-u"></div><p>An anime model that generates uncensored 18+ images. You can buy a token through <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> on Telegram. No reference images.</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI v5</b><span class="tag">anime · 18+</span></div><div class="prov-u"></div><p>Also uncensored, but newer: more styles, up to 20 characters in one image, and comics. Buy it via the guide in <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">@floryhibi's Telegram chat</a> or on the official site <a href="https://novelai.net/" target="_blank" rel="noopener">novelai.net/</a> (if you are not in Russia). No reference images.</p></div>
+<div class="prov"><div class="prov-h"><b>NanoBanana</b><span class="tag">realism · digital art</span></div><div class="prov-u"></div><p>Does both realism and digital art. No 18+ images. Supports reference images, great for roleplay without intimate scenes. Generate through <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> or through your provider if it offers NanoBanana (for example LinkAPI or RoutMy).</p></div>
+</div>
+<figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="routmy-nb" width="1280" height="471" alt="" loading="lazy"></button></figure><figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="linkapi-nb" width="1280" height="389" alt="" loading="lazy"></button></figure>
+<p class="cap">NanoBanana models at providers. Top: Rout.My: gemini-3.1-flash-image-preview, gemini-3-pro-image (PLUS plan), gemini-3.1-flash-lite-image (BASIC). Bottom: the LinkAPI catalogue: gemini-3-pro-image, gemini-3.1-flash-image, gemini-nano-banana-2.1.</p>
+<h3>Connecting it to your roleplay</h3>
+<p>Once you have a token or key, there are two ways.</p>
+<p><b>Option 1: @floryhibi's prompt and regex</b></p>
+<ol class="steps">
+<li>Open <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">@floryhibi's Telegram chat</a>, go to the <b>«Картинки»</b> (Images) topic and open the pinned message.</li>
+<li>It has a prompt for your preset. It works with every image model, the panel figures it out by itself. Download it.</li>
+<li>Open your preset, tap <b>Add</b>, paste the prompt into the field and save.</li>
+<li>Back in the same pinned message, download <b>«Сцена by @floryhibi»</b>.</li>
+<li>In Tavo open <b>Regex</b> → <b>Import</b> and install the file.</li>
+<li>Go to your bot's chat and roleplay. An image panel appears: fill in the fields and press <b>«Сгенерировать»</b> (Generate).</li>
+</ol>
+<p><b>Option 2: a plugin.</b> Find an image plugin on <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a>. Other authors' plugins come with their own instructions.</p>
+<h3>Where to find styles</h3>
+<p>NanoBanana and NovelAI use different styles. Pick what you like.</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NanoBanana</b></div><p><a href="https://ann22cadis.github.io/cadis-ai/" target="_blank" rel="noopener">Cadis site</a> (<a href="https://t.me/cadis_ai" target="_blank" rel="noopener">t.me/cadis_ai</a>)<br><a href="https://moonnsy.github.io/moonnsypic/" target="_blank" rel="noopener">Moonsy site</a> (<a href="https://t.me/moonnsypic" target="_blank" rel="noopener">t.me/moonnsypic</a>)</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI</b></div><p><a href="https://floryhibi.ru/" target="_blank" rel="noopener">floryhibi.ru: styles for NovelAI v5 and v4.5</a><br><a href="https://t.me/+QxUHZWGQAx03Zjgy" target="_blank" rel="noopener">Esochka's Telegram channel</a></p></div>
+</div><div class="pager"><a class="pg prev" href="#summary"><small>Back</small>Summary (memory)</a><a class="pg next" href="#plugins"><small>Next</small>Plugins</a></div></section><section class="chap" data-l="en" data-id="plugins" lang="en" hidden><p class="eyebrow">Chapter 11 / 11</p><h2>Plugins</h2><p class="lead">Plugins add new features to Tavo: an in-story phone, an event diary, trackers, a file manager and more. Plugin files end in <code>.tpg</code>.</p>
+<h3>Where to download</h3>
+<ul class="kv">
+<li><b>Tavo Hub</b>: <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">hub.tavoai.dev</a>. The main and most reliable source.</li>
+<li><b>Creators' Telegram channels.</b> Most of those plugins also end up on Tavo Hub.</li>
+<li><b>Official TavoAI Discord</b>: <a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>, channel <b>插件分享</b>.</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-plugins" width="1080" height="2082" alt="" loading="lazy"></button></figure>
+<p class="cap">Plugins → ① <b>Install</b> a downloaded <code>.tpg</code>. ② The Tavo Plugin Hub banner opens the catalogue. ③ The toggle turns a plugin on or off; ⋮ opens its settings.</p>
+<p class="note">Install plugins from trusted sources only: a plugin runs inside your app.</p><div class="pager"><a class="pg prev" href="#images"><small>Back</small>Images</a><span></span></div></section><section class="chap" data-l="zh" data-id="start" lang="zh-CN" hidden><p class="eyebrow">第 1 / 11</p><h2>首次启动</h2><p class="lead">刚装好 TavoAI，应用里是空的——这很正常。Tavo 只是一个“外壳”，模型、角色和预设都需要你自己添加。推荐按下面的顺序来。</p>
+<ol class="steps">
+<li><b>接入模型</b>：向服务商购买密钥，并添加到 <i>API connections</i>。没有它，角色一句话也回不了。</li>
+<li><b>填写人设（Persona）</b>：你在角色扮演中是谁。</li>
+<li><b>下载角色卡</b>并导入。</li>
+<li><b>安装预设</b>及其正则，它们决定回复的风格与质量。</li>
+<li><b>可选</b>：总结（长期记忆）、生图、插件。</li>
+</ol>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-more" width="1080" height="2259" alt="" loading="lazy"></button></figure>
+<p class="cap">Tavo 菜单（手机上在 More 里）。① API connections：模型接入。② Presets、Lorebooks、Regex：影响回复的一切。③ Long-term memory 就是总结（Summary）。</p><div class="pager"><span></span><a class="pg next" href="#api"><small>下一章</small>服务商与密钥</a></div></section><section class="chap" data-l="zh" data-id="api" lang="zh-CN" hidden><p class="eyebrow">第 2 / 11</p><h2>服务商与密钥</h2><p class="lead">服务商出售模型（Claude、Gemini、GPT、DeepSeek 等）的使用权限。付费后你会得到一个 <b>API 密钥</b>，把它填进 Tavo 即可。</p>
+<p>付费方式有两种：<b>订阅制</b>，每月固定费用；<b>按量付费（PayAsYouGo）</b>，发多少消息扣多少钱。</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>LiteRouter</b><span class="tag">订阅制</span></div><div class="prov-u"><a href="https://literouter.com/" target="_blank" rel="noopener">literouter.com</a></div><p>最便宜的服务商之一，有多档订阅。据作者观察，订阅越便宜，模型越笨。从俄罗斯付款需要中间人代付。</p></div>
+<div class="prov"><div class="prov-h"><b>OpenRouter</b><span class="tag">按量付费</span></div><div class="prov-u"><a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a></div><p>提供官方模型。非常贵，没有订阅，用多少付多少。从俄罗斯无法直接付款。</p></div>
+<div class="prov"><div class="prov-h"><b>Rout.My</b><span class="tag">订阅制</span></div><div class="prov-u"><a href="https://rout.my/" target="_blank" rel="noopener">rout.my</a></div><p>模型质量接近 OpenRouter。含 Opus 的订阅 4900 卢布，较贵。最近偶尔宕机。</p></div>
+<div class="prov"><div class="prov-h"><b>ElectronHub</b><span class="tag">订阅 + 按量</span></div><div class="prov-u"><a href="https://www.electronhub.ai/" target="_blank" rel="noopener">electronhub.ai</a></div><p>两种方式都有。作者本人没用过，但口碑不错：很少宕机，模型质量好，订阅略贵。</p></div>
+</div>
+<div class="alert"><b>OpenRouter 与 VPN。</b>如果你在俄罗斯，访问 OpenRouter 网站和在 Tavo 中使用时<b>必须开启 VPN</b>。不开 VPN 可能被封号，钱也不会退。</div>
+<p class="note">在俄罗斯，几乎所有服务商都需要中间人代付，因为不接受俄罗斯银行卡。</p>
+<h3>如何在 Tavo 中添加密钥</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-api" width="1080" height="2252" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-create" width="1080" height="1077" alt="" loading="lazy"></button></figure></div>
+<p class="cap">API connections → 右上角 <b>Create</b>。 选择 <b>New API connection</b>。Router 仅用于合并多个连接。</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-platforms" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-new" width="1080" height="2255" alt="" loading="lazy"></button></figure></div>
+<p class="cap">OpenRouter 在列表中有专门选项。LiteRouter、Rout.My、ElectronHub 等大多数服务商请选择一个 <b>Custom</b> 选项。通常是 <b>Custom (OpenAI-compatible)</b>；如果服务商说明写的是 Anthropic 或 Gemini 兼容，就选对应的。</p>
+<p class="cap">⑤ <b>API base URL</b>：服务商后台给出的地址（通常以 <code>/v1</code> 结尾）。⑥ <b>API key</b>：你的密钥。⑦ <b>Model</b>：列表会自动加载，选择模型。⑧ <b>Save</b>。</p>
+<p class="note">不要把密钥给别人，也不要发带密钥的截图：别人可以用它花你的钱。</p><div class="pager"><a class="pg prev" href="#start"><small>上一章</small>首次启动</a><a class="pg next" href="#model"><small>下一章</small>模型设置</a></div></section><section class="chap" data-l="zh" data-id="model" lang="zh-CN" hidden><p class="eyebrow">第 3 / 11</p><h2>模型设置</h2><p class="lead">每个连接都有自己的生成参数。在 API connections 中打开连接，点击右上角的齿轮。</p>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-edit" width="1080" height="2195" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-params" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">左：Edit API 中的齿轮（密钥已遮挡）。右：API Parameters，图中是作者为 Claude Opus 设置的参数。</p>
+<ul class="kv">
+<li><b>Temperature</b>：“创造力”。低则稳定贴合剧本，高则天马行空但容易跑偏。</li>
+<li><b>Top-P</b>：模型可选词语的多样程度。</li>
+<li><b>Frequency penalty</b>：对重复用词的惩罚。越高用词越丰富，重复句子越少。</li>
+<li><b>Presence penalty</b>：越高，模型越愿意转向新话题，而不是绕着一个话题打转。</li>
+</ul>
+<div class="tip"><b>优先级。</b>连接参数会覆盖全局参数（菜单中的 <i>Model settings</i>）。这里未设置时使用全局参数。好的预设通常会给出推荐值。</div>
+<p class="note">全局 Model settings 中还有 <b>Memory</b>（模型能看到的最近消息条数，越多记得越清楚但越贵）和 <b>Max response tokens</b>（回复最大长度，太小会被截断）。</p><div class="pager"><a class="pg prev" href="#api"><small>上一章</small>服务商与密钥</a><a class="pg next" href="#persona"><small>下一章</small>人设</a></div></section><section class="chap" data-l="zh" data-id="persona" lang="zh-CN" hidden><p class="eyebrow">第 4 / 11</p><h2>人设</h2><p class="lead">人设就是角色扮演中的你。角色会读取它，知道在和谁说话：名字、外貌、性格、在故事中的身份。</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-personas" width="1080" height="2248" alt="" loading="lazy"></button></figure>
+<p class="cap">Personas → <b>Create</b>。可以为不同故事建多个人设，标有 <i>Default</i> 的是当前启用的。</p>
+<h3>怎么填写</h3>
+<ul class="kv">
+<li><b>名字和年龄。</b>角色会用名字称呼你。</li>
+<li><b>外貌。</b>身高、发色、眼睛、穿衣风格，两到四句即可。</li>
+<li><b>性格。</b>几个关键特征和平时的表现。</li>
+<li><b>故事身份。</b>你和这个角色是什么关系：学生、邻居、同事。建议每个角色单独建一个人设。</li>
+</ul>
+<div class="tip"><b>人设请用英文写</b>，即使你用中文角色扮演：英文占用的 token 更少，每条消息更便宜。</div>
+<pre class="ex">Name: Es Flory.
+Age: 22.
+Date of birth: October 8.
+Zodiac sign: Libra.
+Nationality: Russian-Japanese.
+Place of birth: Saint Petersburg, Russia.
+Place of residence: Suburbs.
+Profession: 4th-year university student (Architecture and Design) + owner of a small pet supplies store.
+Scent: jasmine + peach.
+
+• Personality: Ambitious + relaxed but attentive + charismatic + elegant + LOVES children and gets along extremely well with teenagers + friendly + gentle + strategically minded + devoted to her work + radiates softness and confidence + knows how to support and encourage others + never gives up + mysterious + workaholic + warm and open + knows how to joke and create a cozy atmosphere in conversation + highly perceptive of other people's moods + notices small details + capable of calculating the consequences of her decisions + independent + patient + can become sharp and cold when she is underestimated, used, or controlled + does not tolerate violations of her personal boundaries.
+
+Appearance: Height: 168 cm + weight: 63 kg + plump, soft, feminine, yet toned body + long legs + narrow waist + firm, rounded hips + large but proportionate breasts + well-groomed, very pale skin with a natural glow + green almond-shaped eyes + large, expressive green eyes + very long hair reaching below her waist + slightly wavy hair with some naturally curling strands + babypink hair, a delicate pastel-pink shade with richer pink highlights + hair is thick, soft, airy, and voluminous + a small beauty mark above her right eyebrow + heart-shaped face + full lips + expressive eyebrows + the energy of a calm, confident, and envelopingly gentle woman + makeup focused on glowing skin, a soft blush, expressive eyelashes, and natural pink lips.</pre><div class="pager"><a class="pg prev" href="#model"><small>上一章</small>模型设置</a><a class="pg next" href="#bots"><small>下一章</small>角色卡下载</a></div></section><section class="chap" data-l="zh" data-id="bots" lang="zh-CN" hidden><p class="eyebrow">第 5 / 11</p><h2>角色卡下载</h2><p class="lead">角色卡是一个 PNG 或 JSON 文件，包含角色设定、开场白，有时还带世界书。</p>
+<h3>去哪里找</h3>
+<ul class="kv">
+<li><b><a href="https://janitorai.com/" target="_blank" rel="noopener">janitorai.com</a></b>：数量巨大但质量参差不齐，沙里淘金。需要通过 datacat 下载（见下）。</li>
+<li><b>作者的 Telegram 频道。</b>这些作者的角色卡能撑起很长、很生动的剧情：
+<div class="chips"><a href="https://t.me/SinnersBasement" target="_blank" rel="noopener">t.me/SinnersBasement</a> <a href="https://t.me/murxaibot" target="_blank" rel="noopener">t.me/murxaibot</a> <a href="https://t.me/chromek1djai" target="_blank" rel="noopener">t.me/chromek1djai</a></div></li>
+</ul>
+<h3>如何下载 JanitorAI 的角色卡</h3>
+<ol class="steps">
+<li>打开 <a href="https://datacat.run/fresh" target="_blank" rel="noopener">datacat.run/fresh</a>。</li>
+<li>在 <b>Characters</b> 菜单中点 <b>Explore Characters</b>，输入角色名。</li>
+<li>在角色页面点 <b>Download</b>，选 <b>PNG</b>（或 ZIP，连同世界书和脚本一起下载）。</li>
+</ol>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-1" width="502" height="468" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="datacat-2" width="569" height="650" alt="" loading="lazy"></button></figure></div>
+<h3>导入 Tavo</h3>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-chars" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Characters → <b>Create</b> → 导入文件。下载的 PNG 可以直接导入，卡片数据就保存在图片里。</p><div class="pager"><a class="pg prev" href="#persona"><small>上一章</small>人设</a><a class="pg next" href="#presets"><small>下一章</small>预设</a></div></section><section class="chap" data-l="zh" data-id="presets" lang="zh-CN" hidden><p class="eyebrow">第 6 / 11</p><h2>预设</h2><p class="lead">预设是给模型的一组指令：怎么写、用谁的视角、写多长、什么能写什么不能写。同一个角色换个预设，感觉会完全不同。</p>
+<div class="tip"><b>SillyTavern 与 Tavo。</b>SillyTavern 的预设可以直接在 Tavo 使用；但 Tavo 的预设不一定能在 SillyTavern 使用。</div>
+<h3>去哪里找</h3>
+<ul class="kv">
+<li><b>TavoAI 官方 Discord</b>：<a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>。<b>lorebook-presets-regex</b> 频道是英文预设，<b>世界书-预设-正则分享</b> 是中文预设，全部专为 Tavo 制作。</li>
+<li><b>✦AI Presets✦ Discord</b>：<a href="https://discord.gg/PpHrcJGVH" target="_blank" rel="noopener">discord.gg/PpHrcJGVH</a>。<b>presets</b> 频道有英文和俄文预设，适用于 Tavo 和 SillyTavern，还有提示词、扩展和教程。</li>
+<li><b>俄语作者的 Telegram 频道。</b>口碑较好的预设：
+<div class="chips"><a href="https://t.me/sillykamoi" target="_blank" rel="noopener">t.me/sillykamoi</a> <a href="https://t.me/ah_ah_shino4ka" target="_blank" rel="noopener">t.me/ah_ah_shino4ka</a></div>
+sillykamoi 有很棒的 Claude 预设，另有一个 GPT 预设；Shino 的预设在 Gemini 上表现很好。</li>
+</ul>
+<div class="pair"><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-tavo" width="409" height="455" alt="" loading="lazy"></button></figure><figure class="shot small"><button class="zoom" type="button" aria-label="zoom"><img data-k="dc-aipresets" width="397" height="875" alt="" loading="lazy"></button></figure></div>
+<p class="cap">左：TavoAI Discord 中的相关频道。右：✦AI Presets✦ 的 presets 频道。</p>
+<h3>如何挑选预设</h3>
+<ul class="kv">
+<li><b>适配哪个模型。</b>为 Claude 写的预设在 Gemini 上可能效果差，反之亦然。作者一般会在说明里写明。</li>
+<li><b>语言。</b>用你的语言写的预设，通常输出也更自然。</li>
+<li><b>状态栏还是纯文本。</b>有些预设会加 HTML 状态栏（状态、手机、心声），好看但耗 token。看腻了就换不带的。</li>
+<li><b>用同一个角色测试。</b>在两个预设上各玩 5–10 条对比，比看任何测评都快。</li>
+</ul>
+<h3>安装与开关（Toggles）</h3>
+<div class="pair"><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-presets" width="1080" height="2256" alt="" loading="lazy"></button></figure><figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-preset-edit" width="1080" height="2256" alt="" loading="lazy"></button></figure></div>
+<p class="cap">Presets → <b>Create</b> → 导入文件。点击预设打开。 预设由多个开关条目（Toggles）组成。开关用于启用或关闭单个条目（如状态栏、心声）。铅笔用于编辑条目内容。记得点 <b>Save</b>。</p><div class="pager"><a class="pg prev" href="#bots"><small>上一章</small>角色卡下载</a><a class="pg next" href="#regex"><small>下一章</small>正则</a></div></section><section class="chap" data-l="zh" data-id="regex" lang="zh-CN" hidden><p class="eyebrow">第 7 / 11</p><h2>正则</h2><p class="lead">正则（regex）是针对消息文本的“查找并替换”规则。模型写出带标签的文本，正则把它变成漂亮的状态栏，隐藏多余内容或清理杂乱文字。</p>
+<div class="ba"><div><span class="lbl">模型输出</span><code>&lt;status&gt;心情：生气 | 时间：23:10&lt;/status&gt;</code></div><div><span class="lbl">你看到的</span><div class="plaque">心情：生气 · 23:10</div></div></div>
+<ul class="kv">
+<li><b>正则和预设配套。</b>带状态栏的预设，作者几乎都会同时发布正则文件。没有它你只会看到原始标签。</li>
+<li><b>一起导入：</b>预设导入 Presets，正则导入 Regex。</li>
+<li><b>不要同时启用不同预设的正则</b>，可能互相冲突。</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-regex" width="1080" height="2256" alt="" loading="lazy"></button></figure>
+<p class="cap">Regex → <b>Create</b> → 导入。正则分组，打开分组可单独开关每条规则。</p><div class="pager"><a class="pg prev" href="#presets"><small>上一章</small>预设</a><a class="pg next" href="#lore"><small>下一章</small>世界书</a></div></section><section class="chap" data-l="zh" data-id="lore" lang="zh-CN" hidden><p class="eyebrow">第 8 / 11</p><h2>世界书</h2><p class="lead">世界书是世界观资料：地点、配角、魔法规则等。只有聊天中出现关键词时，相关条目才会加入请求，不会白白占用上下文。</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-lore" width="1080" height="2255" alt="" loading="lazy"></button></figure>
+<p class="cap">Lorebooks → <b>Create</b> → 导入。很多角色卡自带世界书，导入卡片时会自动关联。</p><div class="pager"><a class="pg prev" href="#regex"><small>上一章</small>正则</a><a class="pg next" href="#summary"><small>下一章</small>总结（记忆）</a></div></section><section class="chap" data-l="zh" data-id="summary" lang="zh-CN" hidden><p class="eyebrow">第 9 / 11</p><h2>总结（记忆）</h2><p class="lead">模型只能看到最近的消息（见模型设置中的 Memory），更早的内容会被遗忘。总结（Summary）是 Tavo 自动写的剧情摘要，每次请求都会附带给模型。</p>
+<p>在 Tavo 中对应 <b>Long-term memory</b>。</p>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-memory" width="1080" height="2263" alt="" loading="lazy"></button></figure>
+<ul class="kv">
+<li><b>① Auto summarize</b>：每 N 条消息更新一次摘要，0 为关闭。</li>
+<li><b>② Memory limit</b>：保存多少行记忆。</li>
+<li><b>③ Summary prompt</b>：生成摘要所用的指令，可以要求用中文、标注重要事实。</li>
+<li><b>④ Injection position / prompt</b>：摘要插入请求的位置和格式。</li>
+</ul>
+<div class="tip"><b>为什么需要。</b>长剧情不开总结，角色会忘记名字、承诺和事件。开启后可以把 Memory 调小省钱，剧情也不会丢。摘要可以在聊天中打开手动修改。</div>
+<div class="alert"><b>重要：</b>总结功能可以完全不用。<a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a> 上有插件会根据你的角色扮演聊天自动整理世界书。使用这类插件时，请<b>关闭</b>总结（Auto summarize = 0），改用插件。</div>
+<p class="note">顶部的 <b>Dedicated API</b> 可以让另一个更便宜的模型来写摘要。</p><div class="pager"><a class="pg prev" href="#lore"><small>上一章</small>世界书</a><a class="pg next" href="#images"><small>下一章</small>生图</a></div></section><section class="chap" data-l="zh" data-id="images" lang="zh-CN" hidden><p class="eyebrow">第 10 / 11</p><h2>生图</h2><p class="lead">选择很多。下面介绍三种主要的生图模型、如何接入角色扮演，以及去哪里找风格。</p>
+<h3>模型</h3>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NovelAI v4.5</b><span class="tag">动漫 · 18+</span></div><div class="prov-u"></div><p>动漫模型，可生成无审查的 18+ 图片。可通过 Telegram 的 <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> 购买 token。不支持参考图。</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI v5</b><span class="tag">动漫 · 18+</span></div><div class="prov-u"></div><p>同样无审查，但更新：风格更多，一张图最多 20 个角色，还能画漫画。可按 <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">@floryhibi 的 Telegram 群</a> 里的教程购买，或在官网 <a href="https://novelai.net/" target="_blank" rel="noopener">novelai.net/</a> 购买（不在俄罗斯的话）。不支持参考图。</p></div>
+<div class="prov"><div class="prov-h"><b>NanoBanana</b><span class="tag">写实 · 数字绘画</span></div><div class="prov-u"></div><p>写实和数字绘画都能画，不生成 18+ 图片。支持参考图，非常适合没有亲密场景的角色扮演。可通过 <a href="https://t.me/naistera_blocks_bot" target="_blank" rel="noopener">@naistera_blocks_bot</a> 生成，或通过提供 NanoBanana 的服务商（如 LinkAPI、RoutMy）。</p></div>
+</div>
+<figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="routmy-nb" width="1280" height="471" alt="" loading="lazy"></button></figure><figure class="shot"><button class="zoom" type="button" aria-label="zoom"><img data-k="linkapi-nb" width="1280" height="389" alt="" loading="lazy"></button></figure>
+<p class="cap">服务商提供的 NanoBanana 模型。上：Rout.My：gemini-3.1-flash-image-preview、gemini-3-pro-image（PLUS 订阅）、gemini-3.1-flash-lite-image（BASIC）。下：LinkAPI 模型列表：gemini-3-pro-image、gemini-3.1-flash-image、gemini-nano-banana-2.1。</p>
+<h3>接入角色扮演</h3>
+<p>拿到 token 或密钥后，有两种方式。</p>
+<p><b>方式一：@floryhibi 的提示词和正则</b></p>
+<ol class="steps">
+<li>进入 <a href="https://t.me/+L1AHxy0SPAA2Nzhi" target="_blank" rel="noopener">@floryhibi 的 Telegram 群</a>，打开 <b>«Картинки»</b>（图片）话题和置顶消息。</li>
+<li>里面有一个用于预设的提示词，适用于所有生图模型，面板会自动识别。下载它。</li>
+<li>打开预设，点 <b>Add</b>，把提示词粘贴进去并保存。</li>
+<li>回到同一条置顶消息，下载 <b>«Сцена by @floryhibi»</b>。</li>
+<li>在 Tavo 中打开 <b>Regex</b> → <b>Import</b>，安装该文件。</li>
+<li>进入与角色的聊天开始玩。会出现生图面板：填写内容后点 <b>«Сгенерировать»</b>（生成）。</li>
+</ol>
+<p><b>方式二：插件。</b>在 <a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">Tavo Hub</a> 上找生图插件。其他作者的插件请看各自的说明。</p>
+<h3>去哪里找风格</h3>
+<p>NanoBanana 和 NovelAI 的风格不通用，按喜好选择。</p>
+<div class="provs">
+<div class="prov"><div class="prov-h"><b>NanoBanana</b></div><p><a href="https://ann22cadis.github.io/cadis-ai/" target="_blank" rel="noopener">Cadis 网站</a> (<a href="https://t.me/cadis_ai" target="_blank" rel="noopener">t.me/cadis_ai</a>)<br><a href="https://moonnsy.github.io/moonnsypic/" target="_blank" rel="noopener">Moonsy 网站</a> (<a href="https://t.me/moonnsypic" target="_blank" rel="noopener">t.me/moonnsypic</a>)</p></div>
+<div class="prov"><div class="prov-h"><b>NovelAI</b></div><p><a href="https://floryhibi.ru/" target="_blank" rel="noopener">floryhibi.ru：NovelAI v5 与 v4.5 风格</a><br><a href="https://t.me/+QxUHZWGQAx03Zjgy" target="_blank" rel="noopener">Esochka 的 Telegram 频道</a></p></div>
+</div><div class="pager"><a class="pg prev" href="#summary"><small>上一章</small>总结（记忆）</a><a class="pg next" href="#plugins"><small>下一章</small>插件</a></div></section><section class="chap" data-l="zh" data-id="plugins" lang="zh-CN" hidden><p class="eyebrow">第 11 / 11</p><h2>插件</h2><p class="lead">插件为 Tavo 增加新功能：剧情内的手机、事件日记、各种追踪器、文件管理等。插件文件扩展名为 <code>.tpg</code>。</p>
+<h3>去哪里下载</h3>
+<ul class="kv">
+<li><b>Tavo Hub</b>：<a href="https://hub.tavoai.dev/" target="_blank" rel="noopener">hub.tavoai.dev</a>，最主要也最可靠的来源。</li>
+<li><b>作者的 Telegram 频道。</b>其中大部分插件之后也会上架 Tavo Hub。</li>
+<li><b>TavoAI 官方 Discord</b>：<a href="https://discord.gg/rmbKcMeGn" target="_blank" rel="noopener">discord.gg/rmbKcMeGn</a>，<b>插件分享</b> 频道。</li>
+</ul>
+<figure class="shot tall"><button class="zoom" type="button" aria-label="zoom"><img data-k="m-plugins" width="1080" height="2082" alt="" loading="lazy"></button></figure>
+<p class="cap">Plugins → ① <b>Install</b> 安装下载好的 <code>.tpg</code>。② Tavo Plugin Hub 横幅打开插件目录。③ 开关用于启用或停用插件，⋮ 进入设置。</p>
+<p class="note">只从可信来源安装插件：插件会在你的应用内运行。</p><div class="pager"><a class="pg prev" href="#images"><small>上一章</small>生图</a><span></span></div></section><footer id="by"></footer></main>
+</div>
+<div class="lb" id="lb" hidden></div>
+
+<script>
+function setPalette(p){document.body.dataset.palette=p;document.getElementById('palSw').className='sw sw-'+p;
+  document.getElementById('palName').textContent=p[0].toUpperCase()+p.slice(1);
+  document.querySelectorAll('#palDD button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  try{localStorage.setItem('pg-palette',p)}catch(e){};closeDDs()}
+function setTheme(d){document.body.classList.toggle('dark',d);document.getElementById('tLight').classList.toggle('on',!d);
+  document.getElementById('tDark').classList.toggle('on',d);try{localStorage.setItem('pg-theme',d?'dark':'light')}catch(e){}}
+function toggleDD(id,e){e.stopPropagation();const m=document.getElementById(id),w=m.classList.contains('open');closeDDs();if(!w)m.classList.add('open')}
+function closeDDs(){document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'))}
+document.addEventListener('click',e=>{if(!e.target.closest('.dd'))closeDDs()});
+try{let p=localStorage.getItem('pg-palette');if(p==='violet')p='immortal';setPalette(['peony','jade','immortal'].includes(p)?p:'peony');
+  if(localStorage.getItem('pg-theme')==='dark')setTheme(true)}catch(e){}
+const IMGS={"dc-aipresets": "guide/dc-aipresets.webp", "m-preset-edit": "guide/m-preset-edit.webp", "dc-tavo": "guide/dc-tavo.webp", "m-create": "guide/m-create.webp", "m-plugins": "guide/m-plugins.webp", "m-more": "guide/m-more.webp", "m-memory": "guide/m-memory.webp", "datacat-1": "guide/datacat-1.webp", "m-platforms": "guide/m-platforms.webp", "datacat-2": "guide/datacat-2.webp", "m-personas": "guide/m-personas.webp", "m-presets": "guide/m-presets.webp", "m-new": "guide/m-new.webp", "m-chars": "guide/m-chars.webp", "linkapi-nb": "guide/linkapi-nb.webp", "routmy-nb": "guide/routmy-nb.webp", "m-lore": "guide/m-lore.webp", "m-edit": "guide/m-edit.webp", "m-params": "guide/m-params.webp", "m-regex": "guide/m-regex.webp", "m-api": "guide/m-api.webp"}, UI={"ru": {"lang": "ru", "title": "Гайд по TavoAI для новичков", "sub": "Пошагово: от первого запуска до плагинов", "nav": "Главы", "prev": "Назад", "next": "Дальше", "by": "Автор: @floryhibi", "ch": "Глава"}, "en": {"lang": "en", "title": "TavoAI beginner guide", "sub": "Step by step, from first launch to plugins", "nav": "Chapters", "prev": "Back", "next": "Next", "by": "By @floryhibi", "ch": "Chapter"}, "zh": {"lang": "zh", "title": "TavoAI 新手指南", "sub": "从首次启动到插件，一步一步来", "nav": "章节", "prev": "上一章", "next": "下一章", "by": "作者：@floryhibi", "ch": "第"}};
+document.querySelectorAll('img[data-k]').forEach(i=>{i.src=IMGS[i.dataset.k]});
+let lang='ru';
+try{const s=localStorage.getItem('pg-lang')||localStorage.getItem('tavo-guide-lang');if(UI[s])lang=s}catch(e){}
+const ids=[...new Set([...document.querySelectorAll('.chap')].map(s=>s.dataset.id))];
+function cur(){const h=location.hash.slice(1);return ids.includes(h)?h:ids[0]}
+function show(scroll){
+  const id=cur(),u=UI[lang];
+  document.documentElement.lang=lang==='zh'?'zh-CN':lang;
+  document.getElementById('t').innerHTML=u.title.replace('TavoAI','<em>TavoAI</em>');
+  document.getElementById('s').textContent=u.sub;
+  document.getElementById('by').textContent=u.by;
+  document.querySelectorAll('.langs button').forEach(b=>b.classList.toggle('on',b.dataset.set===lang));document.getElementById('langName').textContent={ru:'RU',en:'EN',zh:'中文'}[lang];document.getElementById('home').textContent={ru:'← На сайт',en:'← Home',zh:'← 返回首页'}[lang];document.title=u.title+' · FloryHibi';
+  document.querySelectorAll('.toc').forEach(n=>n.hidden=n.dataset.l!==lang);
+  document.querySelectorAll('.toc a').forEach(a=>a.setAttribute('aria-current',a.dataset.id===id));
+  document.querySelectorAll('.chap').forEach(s=>s.hidden=!(s.dataset.l===lang&&s.dataset.id===id));
+  const a=document.querySelector(`.toc[data-l="${lang}"] a[aria-current="true"]`);
+  if(a&&a.scrollIntoView&&matchMedia('(max-width:860px)').matches)a.scrollIntoView({block:'nearest',inline:'center'});
+  if(scroll)window.scrollTo({top:0});
+}
+document.querySelectorAll('.langs button').forEach(b=>b.onclick=()=>{lang=b.dataset.set;try{localStorage.setItem('pg-lang',lang)}catch(e){};closeDDs();show(false)});
+addEventListener('hashchange',()=>show(true));
+const lb=document.getElementById('lb');
+document.addEventListener('click',e=>{
+  const z=e.target.closest('main .zoom');
+  if(z){lb.innerHTML='';const c=z.cloneNode(true);c.querySelector('img').loading='eager';lb.appendChild(c);lb.hidden=false;return}
+  if(e.target.closest('#lb'))lb.hidden=true;
+});
+addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
+show(false);
+</script>
+
+</body></html>
