@@ -367,8 +367,8 @@ footer .fine b{color:var(--acc);font-weight:500}
         <a href="#styles" class="btn btn-o"><span data-i="cta3"></span><span class="arr">→</span></a>
       </div>
       <div class="stats">
-        <div class="stat"><b>3</b><span data-i="s1"></span></div>
-        <div class="stat"><b>9</b><span data-i="s2"></span></div>
+        <div class="stat"><b id="nPresets">3</b><span data-i="s1"></span></div>
+        <div class="stat"><b id="nPlugins">12</b><span data-i="s2"></span></div>
         <div class="stat"><b>NovelAI</b><span data-i="s3"></span></div>
       </div>
     </div>
@@ -478,7 +478,9 @@ ru:{
     {n:"Organizer",img:"organizer.png",f:"organizer.tpg",d:"Файловый менеджер для библиотеки Tavo: папки любой вложенности, цветные метки, иконки, теги, избранное, связи, умные папки и поиск — без переименования и копирования оригиналов.",t:["Организация","Библиотека"]},
     {n:"Phone",img:"phone.jpg",f:"phone.tpg",d:"Полноценный айфон внутри ролевой: переписка и звонки с персонажем, Instagram, Твиттер, Дискорд, стримы, банк с Apple Pay, магазин, музыка под сцену и игры против персонажа. Всё, что ты делаешь в телефоне, узнаёт ИИ.",t:["Смартфон","Соцсети"]},
     {n:"Prompt Debugger",img:"prompt-debugger.jpg",f:"prompt-debugger.tpg",d:"Показывает, сколько токенов тратит каждая генерация и из чего состоит промпт: пресет, карточка, персона, сработавшие записи лорбуков, история чата и ответ модели. Заполнение контекста, стоимость по вашим ценам, итоги за чат и кнопка «Оценить сейчас» до отправки.",t:["Токены","Отладка"]},
-    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"Заставляет ИИ помнить расписание и даты: пары, смены, тренировки, распорядок дня, дни рождения и праздники. Следит за временем сюжета и не даёт ему «сжиматься», строит расписание на неделю по самой ролевой, шлёт скрытые напоминания, готовит мир и подарки к праздникам заранее. Сетка месяца, таймлайн дня, задачи и дневник.",t:["Календарь","Расписание"]}
+    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"Заставляет ИИ помнить расписание и даты: пары, смены, тренировки, распорядок дня, дни рождения и праздники. Следит за временем сюжета и не даёт ему «сжиматься», строит расписание на неделю по самой ролевой, шлёт скрытые напоминания, готовит мир и подарки к праздникам заранее. Сетка месяца, таймлайн дня, задачи и дневник.",t:["Календарь","Расписание"]},
+    {n:"Persona Atelier",img:"persona-atelier.jpg",f:"persona-atelier.tpg",d:"Студия создания персонажей: собери персонажа или свою персону, нажимая на варианты-«таблетки» вместо пустых полей, а ИИ превратит выбор в цельную подробную анкету. Готовые архетипы, 10 коротких шагов, мудборд, редактор по разделам и экспорт прямо в Tavo или в Character Card V3.",t:["Персонажи","Персона"]},
+    {n:"Scene Director",img:"scene-director.jpg",f:"scene-director.tpg",d:"ИИ-режиссёр для ролевой: тонкая строка под ответом бота помогает вести сюжет. 16 команд и рекомендации под твою историю, сюжетные линии, случайные события «Судьбы» с легендарными редкостями, атмосфера сцены, «Что если…?» и хроника. В чат ничего не добавляется, ИИ не решает за тебя.",t:["Сюжет","Режиссура"]}
   ],
   thTitle:"Темы",thLead:"Готовые темы оформления для TavoAI.",
   themes:[
@@ -521,7 +523,9 @@ en:{
     {n:"Organizer",img:"organizer.png",f:"organizer.tpg",d:"A file manager for your Tavo library: nested folders, colour labels, icons, tags, favourites, links, smart folders and search — without renaming or copying the originals.",t:["Organization","Library"]},
     {n:"Phone",img:"phone.jpg",f:"phone.tpg",d:"A full iPhone inside your roleplay: texting and calls with your character, Instagram, Twitter, Discord, live streams, a bank with Apple Pay, a shop, music picked for the scene and games against your character. Everything you do on the phone, the AI knows.",t:["Smartphone","Social"]},
     {n:"Prompt Debugger",img:"prompt-debugger.jpg",f:"prompt-debugger.tpg",d:"Shows how many tokens every generation spends and what the prompt is made of: preset, card, persona, triggered lorebook entries, chat history and the model reply. Context fill, cost at your prices, per-chat totals and an “Estimate now” button before you send.",t:["Tokens","Debugging"]},
-    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"Makes the AI remember schedules and dates: classes, work shifts, trainings, daily routine, birthdays and holidays. Tracks story time and stops it from “compressing”, builds a weekly timetable from the roleplay itself, sends hidden reminders, and prepares the world and gifts for holidays ahead of time. Month grid, day timeline, to-dos and a diary.",t:["Calendar","Schedule"]}
+    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"Makes the AI remember schedules and dates: classes, work shifts, trainings, daily routine, birthdays and holidays. Tracks story time and stops it from “compressing”, builds a weekly timetable from the roleplay itself, sends hidden reminders, and prepares the world and gifts for holidays ahead of time. Month grid, day timeline, to-dos and a diary.",t:["Calendar","Schedule"]},
+    {n:"Persona Atelier",img:"persona-atelier.jpg",f:"persona-atelier.tpg",d:"A character design studio: build a character or your own persona by tapping pill-shaped options instead of filling empty forms, and AI turns your choices into a coherent, detailed profile. Ready archetypes, 10 short steps, a moodboard, a section-by-section editor and export straight into Tavo or as Character Card V3.",t:["Characters","Persona"]},
+    {n:"Scene Director",img:"scene-director.jpg",f:"scene-director.tpg",d:"An AI director for your roleplay: a slim strip under the bot’s reply helps you steer the story. 16 commands plus recommendations for your story, story threads, random Fate events with legendary rarities, scene atmosphere, “What if…?” and a chronicle. Nothing is added to the chat, and the AI never decides for you.",t:["Story","Directing"]}
   ],
   thTitle:"Themes",thLead:"Ready-made interface themes for TavoAI.",
   themes:[
@@ -563,7 +567,9 @@ zh:{
     {n:"Organizer",img:"organizer.png",f:"organizer.tpg",d:"Tavo 资料库的文件管理器：任意嵌套文件夹、颜色标记、图标、标签、收藏、关联、智能文件夹和搜索——不会重命名或复制原始对象。",t:["整理","资料库"]},
     {n:"Phone",img:"phone.jpg",f:"phone.tpg",d:"角色扮演中的完整 iPhone：与角色发消息和通话、Instagram、Twitter、Discord、直播、支持 Apple Pay 的银行、商店、按场景推荐的音乐，以及与角色对战的游戏。你在手机上做的一切，AI 都会知道。",t:["智能手机","社交"]},
     {n:"Prompt Debugger",img:"prompt-debugger.jpg",f:"prompt-debugger.tpg",d:"显示每次生成消耗多少 token，以及提示词由哪些部分组成：预设、角色卡、人设、触发的世界书条目、聊天记录和模型回复。上下文占用、按您的价格计算费用、聊天累计，以及发送前的“立即估算”按钮。",t:["Token","调试"]},
-    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"让 AI 记住日程和日期：课程、工作班次、训练、日常作息、生日和节日。追踪剧情时间、防止时间被“压缩”，根据角色扮演本身生成每周课表，发送隐藏提醒，并提前为节日布置环境、准备礼物。月视图、日时间线、待办和日记。",t:["日历","日程"]}
+    {n:"Event Calendar",img:"event-calendar.jpg",f:"event-calendar.tpg",d:"让 AI 记住日程和日期：课程、工作班次、训练、日常作息、生日和节日。追踪剧情时间、防止时间被“压缩”，根据角色扮演本身生成每周课表，发送隐藏提醒，并提前为节日布置环境、准备礼物。月视图、日时间线、待办和日记。",t:["日历","日程"]},
+    {n:"Persona Atelier",img:"persona-atelier.jpg",f:"persona-atelier.tpg",d:"角色设计工作室：点选药丸形选项来打造角色或你自己的人设，无需面对空白表单，AI 会把你的选择写成连贯、详细的档案。现成原型、10 个简短步骤、情绪板、分段编辑器，可直接在 Tavo 中创建或导出 Character Card V3。",t:["角色","人设"]},
+    {n:"Scene Director",img:"scene-director.jpg",f:"scene-director.tpg",d:"角色扮演的 AI 导演：角色回复下方的细长导演条帮你掌控剧情。16 个指令与为你的故事定制的推荐、剧情线、带传说稀有度的“命运”随机事件、场景氛围、“如果……？”和编年史。聊天中不会添加任何内容，AI 绝不替你做决定。",t:["剧情","导演"]}
   ],
   thTitle:"主题",thLead:"适用于 TavoAI 的现成界面主题。",
   themes:[
@@ -609,6 +615,8 @@ function themeCard(x,dl){
 function render(){
   const t=T[lang];cur=t;
   document.documentElement.lang=lang;
+  document.getElementById('nPresets').textContent=t.presets.length;
+  document.getElementById('nPlugins').textContent=t.plugins.length;
   const navHtml=t.nav.map((n,i)=>`<a href="${hrefs[i]}">${n}</a>`).join('');
   document.getElementById('nav').innerHTML=navHtml;
   document.getElementById('navFooter').innerHTML=navHtml+`<a href="${DISCORD}" target="_blank" rel="noopener">Discord</a>`;
