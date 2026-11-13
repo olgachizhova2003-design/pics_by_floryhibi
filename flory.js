@@ -51,6 +51,7 @@ const order = {
   observer: 1, "supernatural-codex": 1, "reproductive-system": 2, facets: 2, estate: 1,
   "prompt-debugger": 3, "love-lab": 2
 };
+const featuredPlugins = ["phone", "scene-director", "event-calendar"];
 const summaries = {
   phone: ["Переписка, звонки и соцсети прямо внутри ролевой.", "Text, call and browse social apps inside your roleplay.", "在角色扮演中发消息、通话和浏览社交应用。"],
   "scene-director": ["Сюжетные линии, случайные события и подсказки под сцену.", "Story threads, random events and scene-specific suggestions.", "剧情线、随机事件和场景建议。"],
@@ -96,7 +97,7 @@ function renderPlugins() {
   });
   $("#result").textContent = plugins.length ? String(plugins.length) : words.empty;
   $("#plugin-grid").innerHTML = plugins.length ? plugins.map(item => `
-    <article class="plugin">
+    <article class="plugin${!category && !query && featuredPlugins.includes(item.id) ? " featured" : ""}">
       <div class="plugin-main"><img src="assets/${item.id}.webp" alt="" width="76" height="76" loading="lazy">
       <div><span class="category">${words.categories[order[item.id]]}</span><h3>${item.n}</h3>
       <p>${summaries[item.id][Object.keys(ui).indexOf(lang)]}</p></div></div>
@@ -141,7 +142,9 @@ function renderStyles() {
   $("#style-grid").innerHTML = styleIndex[model].map(item => `
     <article class="style-card">
       <button type="button" class="style-preview" data-style="${item.number}" aria-label="${words.styleDetails} · ${t.styleWord} ${item.number}">
-        <img src="${item.image}" alt="" loading="lazy">
+        <span class="style-frame" style="--frame-ratio:${item.ratio};--strip-width:${item.frames * 100}%;--frame-offset:${-Math.floor(item.frames / 2) * 100}%">
+          <img src="${item.image}" alt="" loading="lazy">
+        </span>
       </button>
       <div class="style-body"><h3>${t.styleWord} ${item.number}</h3><button type="button" class="download" data-style="${item.number}">${words.styleDetails} ↗</button></div>
     </article>`).join("");
