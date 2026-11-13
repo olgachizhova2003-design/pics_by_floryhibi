@@ -76,9 +76,8 @@ h2 { font: 700 clamp(40px, 5vw, 65px)/1 var(--serif); letter-spacing: -.035em; }
 .files { display: grid; gap: 8px; margin-top: 10px; }
 .files a { overflow-wrap: anywhere; }
 .themes { grid-template-columns: repeat(2,minmax(0,1fr)); }
-.themes { align-items: start; }
 .themes img { aspect-ratio: 2.25; }
-.themes img[src^="themes/9themes_"] { aspect-ratio: 1; object-fit: contain; }
+.themes img[src^="themes/9themes_"] { object-fit: contain; background: #211520; }
 .style-grid { grid-template-columns: repeat(4,minmax(0,1fr)); margin-top: 15px; }
 .style-preview { display: block; width: 100%; padding: 0; border: 0; background: #241320; }
 .style-frame { display: block; position: relative; overflow: hidden; aspect-ratio: var(--frame-ratio); }
