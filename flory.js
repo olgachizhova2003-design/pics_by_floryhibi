@@ -83,18 +83,46 @@ function downloadLink(file, label) {
   return `<a class="download" href="${file}" download>${label} ↓</a>`;
 }
 
+// Dates are first appearances in the site repository. Likes are from the Tavo Hub snapshot on 2026-11-13.
+const pluginDates = {
+  phone: "2026-10-08", "scene-director": "2026-10-30", "event-calendar": "2026-10-22",
+  "persona-atelier": "2026-10-30", organizer: "2026-10-04", "prompt-debugger": "2026-10-05"
+};
+const pluginLikes = {
+  observer: 78, facets: 52, "reproductive-system": 39, phone: 26, "event-calendar": 19,
+  organizer: 18, "supernatural-codex": 17, estate: 16, "prompt-debugger": 16,
+  "scene-director": 10, "persona-atelier": 7
+};
+const pluginLabels = {
+  ru: { sort: "Сортировка", choices: ["Сначала новые", "По популярности", "По алфавиту"], badges: ["Новинка", "Популярное", "Для AI", "Гайд"], cover: "Обложка", screens: "Скриншоты интерфейса", snapshot: "Популярность по отметкам «Нравится» в Tavo Hub на 13.11.2026." },
+  en: { sort: "Sort by", choices: ["Newest first", "Most popular", "Alphabetical"], badges: ["New", "Popular", "For AI", "Guide"], cover: "Cover", screens: "Interface screenshots", snapshot: "Popularity uses Tavo Hub likes from November 13, 2026." },
+  zh: { sort: "排序", choices: ["最新优先", "按人气", "按名称"], badges: ["新品", "热门", "适用于 AI", "指南"], cover: "封面", screens: "界面截图", snapshot: "人气依据 2026 年 11 月 13 日的 Tavo Hub 点赞数。" }
+};
+const pluginSort = $("#plugin-sort");
+let sortMode = "new";
+
+function pluginBadges(id) {
+  const badges = pluginLabels[lang].badges;
+  const names = [];
+  if (pluginDates[id] === "2026-10-30") names.push(badges[0]);
+  if (pluginLikes[id] >= 39) names.push(badges[1]);
+  if (["scene-director", "event-calendar", "persona-atelier", "facets", "estate"].includes(id)) names.push(badges[2]);
+  if (id !== "love-lab") names.push(badges[3]);
+  return names.map(name => `<span>${name}</span>`).join("");
+}
+
 let pluginFrame = 0;
 let displayedPlugin;
 
 function pluginPreview(id) {
   const shots = previewImages[id]?.[lang] || [];
-  const labels = { ru: ["Обложка", "Смотреть интерфейс"], en: ["Cover", "See the interface"], zh: ["封面", "查看界面"] }[lang];
+  const labels = pluginLabels[lang];
   const source = pluginFrame ? "assets/previews/" + shots[pluginFrame - 1] : "assets/" + id + ".webp";
   return `<div class="plugin-art${pluginFrame ? " showing-screen" : ""}">
     <img src="${source}" alt="${pluginFrame ? detailText[lang].gallery + " " + pluginFrame : ""}" width="480" height="480">
-  </div>${shots.length ? `<div class="preview-controls" aria-label="${labels[1]}">
-    <button type="button" data-plugin-frame="0" aria-pressed="${pluginFrame === 0}">${labels[0]}</button>
-    ${shots.map((_, i) => `<button type="button" data-plugin-frame="${i + 1}" aria-label="${detailText[lang].gallery} ${i + 1}" aria-pressed="${pluginFrame === i + 1}">${i + 1}</button>`).join("")}
+  </div>${shots.length ? `<div class="preview-label">${labels.screens}</div><div class="preview-controls" role="group" aria-label="${labels.screens}">
+    <button type="button" data-plugin-frame="0" aria-pressed="${pluginFrame === 0}">${labels.cover}</button>
+    ${shots.map((shot, i) => `<button type="button" data-plugin-frame="${i + 1}" aria-label="${labels.screens} ${i + 1}" aria-pressed="${pluginFrame === i + 1}"><img src="assets/previews/${shot}" alt="" loading="lazy"></button>`).join("")}
   </div>` : ""}`;
 }
 
@@ -102,14 +130,27 @@ function renderPlugins() {
   const t = catalog[lang];
   const words = ui[lang];
   const query = search.value.trim().toLowerCase();
-  const plugins = Object.keys(order).map(id => {
+  const matches = Object.keys(order).map(id => {
     const item = t.plugins.find(plugin => plugin.f === id + ".tpg");
     return { ...item, id };
   }).filter(item => {
     const aliases = Object.values(catalog).map(locale => locale.plugins.find(plugin => plugin.f === item.f).n);
     const searchable = [item.id, item.d, ...aliases, ...item.t].join(" ").toLowerCase();
-    return (!category || order[item.id] === category) && searchable.includes(query);
+    return searchable.includes(query);
   });
+  for (const button of $("#filters").querySelectorAll("button")) {
+    const index = Number(button.dataset.category);
+    const count = matches.filter(item => !index || order[item.id] === index).length;
+    button.textContent = `${words.categories[index]} (${count})`;
+  }
+  const plugins = matches.filter(item => !category || order[item.id] === category);
+  const alphabetical = new Intl.Collator(lang, { sensitivity: "base", numeric: true });
+  plugins.sort((a, b) => {
+    const recent = (pluginDates[b.id] || "2026-09-19").localeCompare(pluginDates[a.id] || "2026-09-19");
+    const popular = (pluginLikes[b.id] ?? -1) - (pluginLikes[a.id] ?? -1);
+    return (sortMode === "new" ? recent : sortMode === "popular" ? popular : 0) || alphabetical.compare(a.n, b.n);
+  });
+  $("#plugin-sort-note").textContent = sortMode === "popular" ? pluginLabels[lang].snapshot : "";
   $("#result").textContent = plugins.length ? String(plugins.length) : words.empty;
   const selected = plugins.find(item => item.id === selectedPlugin) || plugins[0];
   if (selected?.id !== displayedPlugin || pluginFrame > (previewImages[selected?.id]?.[lang]?.length || 0)) pluginFrame = 0;
@@ -131,7 +172,9 @@ function renderPlugins() {
     <div class="plugin-index" role="group" aria-label="${t.plTitle}">
       ${plugins.map(item => `<button type="button" class="plugin-choice" data-select-plugin="${item.id}" aria-pressed="${item.id === selected.id}">
         <img src="assets/${item.id}.webp" alt="" width="42" height="42" loading="lazy">
-        <span>${item.n}</span><span class="choice-arrow" aria-hidden="true">↗</span>
+        <span class="choice-copy"><strong>${item.n}</strong>
+          <span class="choice-description">${summaries[item.id][Object.keys(ui).indexOf(lang)]}</span>
+          <span class="choice-badges">${pluginBadges(item.id)}</span></span><span class="choice-arrow" aria-hidden="true">↗</span>
       </button>`).join("")}
     </div>` : `<p class="empty">${words.empty}</p>`;
 }
@@ -199,6 +242,10 @@ function render() {
   document.title = "FloryHibi — " + t.plTitle + " · TavoAI";
   language.value = lang;
   search.placeholder = words.search;
+  pluginSort.ariaLabel = pluginLabels[lang].sort;
+  pluginSort.innerHTML = ["new", "popular", "alphabetical"].map((value, i) =>
+    `<option value="${value}">${pluginLabels[lang].choices[i]}</option>`).join("");
+  pluginSort.value = sortMode;
   $("#close-dialog").ariaLabel = words.close;
   document.querySelectorAll("[data-ui]").forEach(node => { node.textContent = words[node.dataset.ui]; });
   document.querySelectorAll("[data-text]").forEach(node => { node.textContent = t[node.dataset.text]; });
@@ -357,6 +404,7 @@ language.addEventListener("change", () => {
   render();
 });
 search.addEventListener("input", renderPlugins);
+pluginSort.addEventListener("change", () => { sortMode = pluginSort.value; renderPlugins(); });
 $("#filters").addEventListener("click", event => {
   const button = event.target.closest("[data-category]");
   if (!button) return;
