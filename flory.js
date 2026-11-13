@@ -150,6 +150,7 @@ function renderResources(items, grid) {
           <h3>${item.n}</h3>
           <p>${item.d}</p>
         </div>
+        <button type="button" class="text-link preset-more" data-preset="${item.img}">${words.details} ↗</button>
         <div class="preset-files">${files}</div>
       </article>`;
     }
@@ -192,6 +193,75 @@ function render() {
   renderStyles();
 }
 
+const detailText = {
+  ru: {
+    gallery: "Как это выглядит", demo: "Демонстрационные скриншоты с тестовыми данными.",
+    missing: "Для этого языка пока нет скриншотов.", enlarge: "Открыть в полном размере",
+    "peonyset": ["Регексы оформляют служебные блоки ответа модели: статусную панель, переписку, дневник, форум и досье персонажей.", "Импортируй пресет, затем набор регексов нужного языка. Для русской версии выбери архив под свой провайдер изображений."],
+    jade: ["Регексы превращают теги модели в свитки, печати, карты и другие элементы мира сянься.", "Выбери пресет и регексы одного языка. В комплекте есть отдельные наборы для текстовых плашек и для оформления с изображениями."],
+    fantasy: ["В работе оформление для состояния персонажа, его характера и внутренних мыслей. Эти панели помогают вынести детали сцены из основного текста."]
+  },
+  en: {
+    gallery: "How it looks", demo: "Demo screenshots with sample data.",
+    missing: "Screenshots for this language are not available yet.", enlarge: "Open full size",
+    peonyset: ["Regexes format tagged model output into a status panel, messenger, diary, forum and character dossiers.", "Import the preset and the regex pack for the same language. For Russian, choose the archive matching your image provider."],
+    jade: ["Regexes turn model tags into scrolls, seals, maps and other xianxia interface elements.", "Choose a preset and regex pack in the same language. Text panels and image-enabled layouts are provided in separate packs."],
+    fantasy: ["Panels for character status, personality and inner thoughts are in development. They give scene details a place outside the main story text."]
+  },
+  zh: {
+    gallery: "界面预览", demo: "使用示例数据制作的演示截图。",
+    missing: "此语言暂无截图。", enlarge: "查看原图",
+    peonyset: ["正则把模型回复中的标签渲染为状态栏、聊天窗口、日记、论坛和角色档案。", "请导入相同语言的预设和正则包。俄语版按图片服务商选择压缩包。"],
+    jade: ["正则将模型标签渲染为卷轴、印信、地图等仙侠界面元素。", "请选择相同语言的预设和正则包。纯文本面板与带图布局分别打包。"],
+    fantasy: ["角色状态、性格和内心独白面板正在开发中。这些面板让剧情细节独立于正文展示。"]
+  }
+};
+
+const previewCaptions = {
+  peonyset: ["Переписка", "Messenger", "聊天窗口"],
+  "peonyset-twist": ["Сюжетный поворот", "Plot twist", "剧情转折"],
+  "peonyset-os-header": ["Статусная панель", "Status panel", "状态栏"],
+  "peonyset-forum": ["Форум", "Forum", "论坛"],
+  "peonyset-dossier": ["Досье персонажа", "Character dossier", "角色档案"],
+  jade: ["Талисман", "Talisman", "符箓"],
+  "fantasy-1": ["Статусная панель"],
+  "fantasy-2": ["Внутренние мысли"],
+  "fantasy-3": ["Панель характера"]
+};
+
+function previewGallery(id) {
+  const words = detailText[lang];
+  const shots = previewImages[id]?.[lang] || [];
+  return `<section class="detail-gallery"><h3>${words.gallery}</h3>
+    ${shots.length ? `<p class="dialog-desc">${words.demo}</p><div class="preview-shots">
+      ${shots.map(file => {
+        const key = file.replace(/-(ru|en|zh)(?=-|\.)/, "").replace(/\.webp$/, "");
+        const caption = previewCaptions[key]?.[Object.keys(detailText).indexOf(lang)];
+        return `<figure><a href="assets/previews/${file}" target="_blank" rel="noopener">
+          <img src="assets/previews/${file}" alt="${caption ? caption + " · " : ""}${words.enlarge}" loading="lazy"></a>
+          ${caption ? `<figcaption>${caption}</figcaption>` : ""}</figure>`;
+      }).join("")}</div>`
+      : `<p class="dialog-note">${words.missing}</p>`}
+    </section>`;
+}
+
+function openPreset(cover) {
+  const item = catalog[lang].presets.find(preset => preset.img === cover);
+  const id = cover.replace(".jpg", "");
+  content.innerHTML = `<div class="detail-head"><img src="${item.img}" alt="" width="80" height="80">
+    <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
+    <p class="dialog-desc">${item.d}</p>
+    ${detailText[lang][id].map(text => `<p class="dialog-desc">${text}</p>`).join("")}
+    ${previewGallery(id)}`;
+  dialog.classList.add("visual-details");
+  dialog.showModal();
+}
+
+$("#preset-grid").addEventListener("click", event => {
+  const button = event.target.closest("[data-preset]");
+  if (button) openPreset(button.dataset.preset);
+});
+
 function openPlugin(id) {
   const t = catalog[lang];
   const words = ui[lang];
@@ -199,9 +269,11 @@ function openPlugin(id) {
   content.innerHTML = `<div class="detail-head"><img src="assets/${id}.webp" alt="" width="80" height="80">
     <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
+    ${previewGallery(id)}
     ${id === "love-lab" ? `<p class="dialog-note">${words.unavailable}</p>` :
       `<p class="dialog-note">${words.installNote}</p>
       <div class="actions">${downloadLink(item.f, t.dl + " .tpg")}<a class="button secondary" href="guide.html#plugins">${words.install} ↗</a></div>`}`;
+  dialog.classList.add("visual-details");
   dialog.showModal();
 }
 
@@ -295,6 +367,7 @@ $("#style-grid").addEventListener("click", event => {
 dialog.addEventListener("close", () => {
   promptRequest?.abort();
   content.replaceChildren();
+  dialog.classList.remove("visual-details");
 });
 dialog.addEventListener("click", event => {
   if (event.target !== dialog) return;

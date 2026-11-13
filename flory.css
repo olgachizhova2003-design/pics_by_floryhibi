@@ -361,3 +361,16 @@ dialog {
     pointer-events: none;
   }
 }
+
+.preset { grid-template-rows: auto 1fr auto auto; }
+.preset-more { justify-self: start; padding: 0 4px 14px; border: 0; background: transparent; text-align: left; cursor: pointer; }
+dialog.visual-details { width: min(820px, calc(100% - 28px)); }
+.detail-gallery { margin: 20px 0; padding-top: 16px; border-top: 1px solid var(--line); }
+.detail-gallery h3 { font: 700 29px/1.1 var(--serif); }
+.preview-shots { display: grid; gap: 12px; }
+.preview-shots a { display: block; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.preview-shots img { width: 100%; height: auto; background: #100b14; }
+.preview-shots a:focus-visible { outline-offset: 1px; }
+
+.preview-shots figure { margin: 0; }
+.preview-shots figcaption { color: var(--muted); font-size: .82rem; padding: 6px 2px; }
