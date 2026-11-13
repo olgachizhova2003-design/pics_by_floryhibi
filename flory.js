@@ -83,6 +83,21 @@ function downloadLink(file, label) {
   return `<a class="download" href="${file}" download>${label} ↓</a>`;
 }
 
+let pluginFrame = 0;
+let displayedPlugin;
+
+function pluginPreview(id) {
+  const shots = previewImages[id]?.[lang] || [];
+  const labels = { ru: ["Обложка", "Смотреть интерфейс"], en: ["Cover", "See the interface"], zh: ["封面", "查看界面"] }[lang];
+  const source = pluginFrame ? "assets/previews/" + shots[pluginFrame - 1] : "assets/" + id + ".webp";
+  return `<div class="plugin-art${pluginFrame ? " showing-screen" : ""}">
+    <img src="${source}" alt="${pluginFrame ? detailText[lang].gallery + " " + pluginFrame : ""}" width="480" height="480">
+  </div>${shots.length ? `<div class="preview-controls" aria-label="${labels[1]}">
+    <button type="button" data-plugin-frame="0" aria-pressed="${pluginFrame === 0}">${labels[0]}</button>
+    ${shots.map((_, i) => `<button type="button" data-plugin-frame="${i + 1}" aria-label="${detailText[lang].gallery} ${i + 1}" aria-pressed="${pluginFrame === i + 1}">${i + 1}</button>`).join("")}
+  </div>` : ""}`;
+}
+
 function renderPlugins() {
   const t = catalog[lang];
   const words = ui[lang];
@@ -97,9 +112,11 @@ function renderPlugins() {
   });
   $("#result").textContent = plugins.length ? String(plugins.length) : words.empty;
   const selected = plugins.find(item => item.id === selectedPlugin) || plugins[0];
+  if (selected?.id !== displayedPlugin || pluginFrame > (previewImages[selected?.id]?.[lang]?.length || 0)) pluginFrame = 0;
+  displayedPlugin = selected?.id;
   $("#plugin-grid").innerHTML = selected ? `
     <article class="plugin-display" aria-labelledby="selected-plugin">
-      <div class="plugin-art"><img src="assets/${selected.id}.webp" alt="" width="480" height="480"></div>
+      <div class="plugin-preview">${pluginPreview(selected.id)}</div>
       <div class="plugin-copy">
         <span class="category">${words.categories[order[selected.id]]}</span>
         <h3 id="selected-plugin">${selected.n}</h3>
@@ -348,9 +365,17 @@ $("#filters").addEventListener("click", event => {
   renderPlugins();
 });
 $("#plugin-grid").addEventListener("click", event => {
+  const frame = event.target.closest("[data-plugin-frame]");
+  if (frame) {
+    pluginFrame = Number(frame.dataset.pluginFrame);
+    $(".plugin-preview").innerHTML = pluginPreview(displayedPlugin);
+    $(`[data-plugin-frame="${pluginFrame}"]`).focus({ preventScroll: true });
+    return;
+  }
   const choice = event.target.closest("[data-select-plugin]");
   if (choice) {
     selectedPlugin = choice.dataset.selectPlugin;
+    pluginFrame = 0;
     renderPlugins();
     $(`[data-select-plugin="${selectedPlugin}"]`).focus({ preventScroll: true });
     if (matchMedia("(max-width: 900px)").matches) $("#plugin-grid").scrollIntoView({ block: "start" });
