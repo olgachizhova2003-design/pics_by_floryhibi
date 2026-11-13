@@ -303,3 +303,47 @@ dialog.addEventListener("click", event => {
 });
 
 render();
+
+const pointerLighting = matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+let litSurface;
+let pendingLightFrame;
+let pointerPosition;
+
+function clearPointerLight() {
+  cancelAnimationFrame(pendingLightFrame);
+  pendingLightFrame = undefined;
+  if (!litSurface) return;
+  for (const property of ["--light-visible", "--drift-x", "--drift-y"]) {
+    litSurface.style.removeProperty(property);
+  }
+  litSurface = undefined;
+}
+
+document.addEventListener("pointermove", event => {
+  if (!pointerLighting.matches || event.pointerType !== "mouse") return;
+  const surface = event.target.closest(".hero, .plugin-display, .preset, .resource, .about");
+  const light = surface?.matches(".hero") ? surface.querySelector(".hero-art") : surface;
+  if (light !== litSurface) clearPointerLight();
+  if (!light) return;
+  litSurface = light;
+  pointerPosition = { x: event.clientX, y: event.clientY };
+  if (pendingLightFrame !== undefined) return;
+  pendingLightFrame = requestAnimationFrame(() => {
+    pendingLightFrame = undefined;
+    const bounds = light.getBoundingClientRect();
+    const x = (pointerPosition.x - bounds.left) / bounds.width;
+    const y = (pointerPosition.y - bounds.top) / bounds.height;
+    light.style.setProperty("--light-x", (x * 100) + "%");
+    light.style.setProperty("--light-y", (y * 100) + "%");
+    light.style.setProperty("--light-visible", "1");
+    if (light.matches(".hero-art")) {
+      light.style.setProperty("--drift-x", (Math.max(0, Math.min(1, x)) - .5) * 18 + "px");
+      light.style.setProperty("--drift-y", (Math.max(0, Math.min(1, y)) - .5) * 12 + "px");
+    }
+  });
+});
+
+document.documentElement.addEventListener("pointerleave", clearPointerLight);
+window.addEventListener("scroll", clearPointerLight, { passive: true });
+window.addEventListener("blur", clearPointerLight);
+pointerLighting.addEventListener("change", clearPointerLight);

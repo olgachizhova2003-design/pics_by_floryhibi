@@ -333,3 +333,31 @@ dialog {
     .plugin-art:hover::after, .preset-cover:hover::after { animation: reflected-light .8s ease-out; }
   }
 }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero-art img { transform: translate(var(--drift-x, 0px), var(--drift-y, 0px)) scale(1.025); transition: transform .45s ease-out; }
+  .hero-art::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: radial-gradient(ellipse 150px 120px at var(--light-x, 50%) var(--light-y, 50%), #ffbbda70, #ff3e9460 33%, transparent 76%);
+    mask-image: radial-gradient(ellipse closest-side, #000 75%, transparent);
+    mix-blend-mode: screen;
+    opacity: var(--light-visible, 0);
+    transition: opacity .25s;
+    pointer-events: none;
+  }
+  .plugin-display, .preset, .resource, .about { position: relative; isolation: isolate; }
+  :is(.plugin-display, .preset, .resource, .about)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle 145px at var(--light-x, 50%) var(--light-y, 50%), #ff97c32a, #ff499b12 48%, transparent);
+    mix-blend-mode: screen;
+    opacity: var(--light-visible, 0);
+    transition: opacity .25s;
+    pointer-events: none;
+  }
+}
