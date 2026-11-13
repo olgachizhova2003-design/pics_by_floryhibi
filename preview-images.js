@@ -29,22 +29,18 @@ const previewImages = {
       "facets-zh.webp"
     ]
   },
-  "fantasy": {
-    "ru": [
-      "fantasy-ru-1.webp",
-      "fantasy-ru-2.webp",
-      "fantasy-ru-3.webp"
-    ]
-  },
   "jade": {
     "en": [
-      "jade-en.webp"
+      "jade-en.webp",
+      "jade-en-scroll.webp"
     ],
     "ru": [
-      "jade-ru.webp"
+      "jade-ru.webp",
+      "jade-ru-scroll.webp"
     ],
     "zh": [
-      "jade-zh.webp"
+      "jade-zh.webp",
+      "jade-zh-scroll.webp"
     ]
   },
   "love-lab": {
@@ -77,10 +73,7 @@ const previewImages = {
   "peonyset": {
     "en": [
       "peonyset-en.webp",
-      "peonyset-en-dossier.webp",
-      "peonyset-en-forum.webp",
-      "peonyset-en-twist.webp",
-      "peonyset-en-os-header.webp"
+      "peonyset-en-twist.webp"
     ],
     "ru": [
       "peonyset-ru.webp",

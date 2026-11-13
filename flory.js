@@ -220,13 +220,8 @@ const detailText = {
 const previewCaptions = {
   peonyset: ["Переписка", "Messenger", "聊天窗口"],
   "peonyset-twist": ["Сюжетный поворот", "Plot twist", "剧情转折"],
-  "peonyset-os-header": ["Статусная панель", "Status panel", "状态栏"],
-  "peonyset-forum": ["Форум", "Forum", "论坛"],
-  "peonyset-dossier": ["Досье персонажа", "Character dossier", "角色档案"],
   jade: ["Талисман", "Talisman", "符箓"],
-  "fantasy-1": ["Статусная панель"],
-  "fantasy-2": ["Внутренние мысли"],
-  "fantasy-3": ["Панель характера"]
+  "jade-scroll": ["Свиток", "Scroll", "卷轴"]
 };
 
 function previewGallery(id) {
@@ -252,7 +247,7 @@ function openPreset(cover) {
     <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
     ${detailText[lang][id].map(text => `<p class="dialog-desc">${text}</p>`).join("")}
-    ${previewGallery(id)}`;
+    ${item.dev ? `<p class="dialog-note">${catalog[lang].dev}</p>` : previewGallery(id)}`;
   dialog.classList.add("visual-details");
   dialog.showModal();
 }
