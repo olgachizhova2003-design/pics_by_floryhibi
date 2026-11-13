@@ -207,3 +207,52 @@ dialog h2 { font-size: clamp(34px,6vw,50px); overflow-wrap: anywhere; }
   .plugin-art { width: min(69%, 220px); margin-inline: auto; }
   .plugin-copy .actions { margin-top: 16px; }
 }
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 34px);
+}
+.preset {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  padding: 0 0 13px;
+  border-bottom: 1px solid #593345;
+}
+.preset-cover {
+  padding: 5px;
+  border: 1px solid #593345;
+  background: #140c14;
+}
+.preset-cover img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.preset-copy { padding: 17px 4px 19px; }
+.preset-copy h3 {
+  font: 700 clamp(28px, 3.4vw, 49px)/.95 var(--serif);
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+.preset-copy p { color: var(--muted); font-size: .88rem; margin-top: 10px; }
+.preset-files {
+  align-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 4px 0;
+  border-top: 1px solid var(--line);
+}
+.preset-files details {
+  border: 1px solid #66354f;
+  border-radius: 4px;
+  background: #251422;
+  padding: 0 9px;
+  font-size: .76rem;
+}
+.preset-files details[open] { flex-basis: 100%; padding-bottom: 9px; }
+.preset-files summary { padding-block: 8px; cursor: pointer; color: var(--pale); font-weight: 600; }
+.preset-files p, .preset-files > .category { font-size: .76rem; color: var(--pale); padding: 6px 0; margin: 0; }
+@media (max-width: 650px) {
+  .preset-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .preset-copy h3 { font-size: 36px; }
+}

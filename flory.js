@@ -130,10 +130,11 @@ function fileLabel(file, words) {
 function renderResources(items, grid) {
   const t = catalog[lang];
   const words = ui[lang];
+  const isPreset = grid === "#preset-grid";
   $(grid).innerHTML = items.map(item => {
     let files = "";
     if (item.langs) {
-      files = item.langs.map(entry => entry.f ? `<details><summary>${entry.l}</summary><div class="files">${entry.f.map(file => downloadLink(file, fileLabel(file, words))).join("")}</div></details>`
+      files = item.langs.map(entry => entry.f ? `<details><summary>${t.dl} · ${entry.l}</summary><div class="files">${entry.f.map(file => downloadLink(file, fileLabel(file, words))).join("")}</div></details>`
         : `<p>${entry.l} · ${t.dev}</p>`).join("");
     } else if (item.multi) {
       files = `<div class="actions">${item.multi.map(entry => downloadLink(entry.f, entry.l)).join("")}</div>`;
@@ -141,6 +142,16 @@ function renderResources(items, grid) {
       files = downloadLink(item.f, t.dl + " .zip");
     } else {
       files = `<span class="category">${t.dev}</span>`;
+    }
+    if (isPreset) {
+      return `<article class="preset">
+        <div class="preset-cover"><img src="${item.img}" alt="" width="1254" height="1254" loading="lazy"></div>
+        <div class="preset-copy">
+          <h3>${item.n}</h3>
+          <p>${item.d}</p>
+        </div>
+        <div class="preset-files">${files}</div>
+      </article>`;
     }
     return `<article class="resource"><img src="${item.img}" alt="" loading="lazy"><div class="resource-body"><h3>${item.n}</h3><p>${item.d}</p>${files}</div></article>`;
   }).join("");
