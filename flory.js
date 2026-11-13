@@ -51,7 +51,7 @@ const order = {
   observer: 1, "supernatural-codex": 1, "reproductive-system": 2, facets: 2, estate: 1,
   "prompt-debugger": 3, "love-lab": 2
 };
-const featuredPlugins = ["phone", "scene-director", "event-calendar"];
+let selectedPlugin = "phone";
 const summaries = {
   phone: ["Переписка, звонки и соцсети прямо внутри ролевой.", "Text, call and browse social apps inside your roleplay.", "在角色扮演中发消息、通话和浏览社交应用。"],
   "scene-director": ["Сюжетные линии, случайные события и подсказки под сцену.", "Story threads, random events and scene-specific suggestions.", "剧情线、随机事件和场景建议。"],
@@ -96,14 +96,27 @@ function renderPlugins() {
     return (!category || order[item.id] === category) && searchable.includes(query);
   });
   $("#result").textContent = plugins.length ? String(plugins.length) : words.empty;
-  $("#plugin-grid").innerHTML = plugins.length ? plugins.map(item => `
-    <article class="plugin${!category && !query && featuredPlugins.includes(item.id) ? " featured" : ""}">
-      <div class="plugin-main"><img src="assets/${item.id}.webp" alt="" width="76" height="76" loading="lazy">
-      <div><span class="category">${words.categories[order[item.id]]}</span><h3>${item.n}</h3>
-      <p>${summaries[item.id][Object.keys(ui).indexOf(lang)]}</p></div></div>
-      <div class="plugin-footer"><button type="button" class="text-link" data-plugin="${item.id}" aria-label="${words.details} · ${item.n}">${words.details} ↗</button>
-      ${item.id === "love-lab" ? `<span class="category">${words.unavailable}</span>` : downloadLink(item.f, t.dl + " .tpg")}</div>
-    </article>`).join("") : `<p class="empty">${words.empty}</p>`;
+  const selected = plugins.find(item => item.id === selectedPlugin) || plugins[0];
+  $("#plugin-grid").innerHTML = selected ? `
+    <article class="plugin-display" aria-labelledby="selected-plugin">
+      <div class="plugin-art"><img src="assets/${selected.id}.webp" alt="" width="480" height="480"></div>
+      <div class="plugin-copy">
+        <span class="category">${words.categories[order[selected.id]]}</span>
+        <h3 id="selected-plugin">${selected.n}</h3>
+        <p>${summaries[selected.id][Object.keys(ui).indexOf(lang)]}</p>
+        <div class="actions">
+          <button type="button" class="button secondary" data-plugin="${selected.id}">${words.details} ↗</button>
+          ${selected.id === "love-lab" ? `<span class="category">${words.unavailable}</span>` :
+            `<a class="button primary" href="${selected.f}" download>${t.dl} .tpg ↓</a>`}
+        </div>
+      </div>
+    </article>
+    <div class="plugin-index" role="group" aria-label="${t.plTitle}">
+      ${plugins.map(item => `<button type="button" class="plugin-choice" data-select-plugin="${item.id}" aria-pressed="${item.id === selected.id}">
+        <img src="assets/${item.id}.webp" alt="" width="42" height="42" loading="lazy">
+        <span>${item.n}</span><span class="choice-arrow" aria-hidden="true">↗</span>
+      </button>`).join("")}
+    </div>` : `<p class="empty">${words.empty}</p>`;
 }
 
 function fileLabel(file, words) {
@@ -247,6 +260,14 @@ $("#filters").addEventListener("click", event => {
   renderPlugins();
 });
 $("#plugin-grid").addEventListener("click", event => {
+  const choice = event.target.closest("[data-select-plugin]");
+  if (choice) {
+    selectedPlugin = choice.dataset.selectPlugin;
+    renderPlugins();
+    $(`[data-select-plugin="${selectedPlugin}"]`).focus({ preventScroll: true });
+    if (matchMedia("(max-width: 900px)").matches) $("#plugin-grid").scrollIntoView({ block: "start" });
+    return;
+  }
   const button = event.target.closest("[data-plugin]");
   if (button) openPlugin(button.dataset.plugin);
 });
