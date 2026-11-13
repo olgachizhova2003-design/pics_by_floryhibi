@@ -195,6 +195,7 @@ function render() {
 
 const detailText = {
   ru: {
+    translated: "Китайские подписи в этих кадрах переведены для сайта.",
     gallery: "Как это выглядит", demo: "Демонстрационные скриншоты с тестовыми данными.",
     missing: "Для этого языка пока нет скриншотов.", enlarge: "Открыть в полном размере",
     "peonyset": ["Регексы оформляют служебные блоки ответа модели: статусную панель, переписку, дневник, форум и досье персонажей.", "Импортируй пресет, затем набор регексов нужного языка. Для русской версии выбери архив под свой провайдер изображений."],
@@ -202,6 +203,7 @@ const detailText = {
     fantasy: ["В работе оформление для состояния персонажа, его характера и внутренних мыслей. Эти панели помогают вынести детали сцены из основного текста."]
   },
   en: {
+    translated: "Chinese labels in these screenshots were translated for this site.",
     gallery: "How it looks", demo: "Demo screenshots with sample data.",
     missing: "Screenshots for this language are not available yet.", enlarge: "Open full size",
     peonyset: ["Regexes format tagged model output into a status panel, messenger, diary, forum and character dossiers.", "Import the preset and the regex pack for the same language. For Russian, choose the archive matching your image provider."],
@@ -209,6 +211,7 @@ const detailText = {
     fantasy: ["Panels for character status, personality and inner thoughts are in development. They give scene details a place outside the main story text."]
   },
   zh: {
+    translated: "此处的中文界面文字为网站演示译文。",
     gallery: "界面预览", demo: "使用示例数据制作的演示截图。",
     missing: "此语言暂无截图。", enlarge: "查看原图",
     peonyset: ["正则把模型回复中的标签渲染为状态栏、聊天窗口、日记、论坛和角色档案。", "请导入相同语言的预设和正则包。俄语版按图片服务商选择压缩包。"],
@@ -221,14 +224,21 @@ const previewCaptions = {
   peonyset: ["Переписка", "Messenger", "聊天窗口"],
   "peonyset-twist": ["Сюжетный поворот", "Plot twist", "剧情转折"],
   jade: ["Талисман", "Talisman", "符箓"],
-  "jade-scroll": ["Свиток", "Scroll", "卷轴"]
+  "jade-scroll": ["Свиток", "Scroll", "卷轴"],
+  "jade-location": ["Локация", "Location", "地点"],
+  "jade-relation": ["Отношения", "Relationships", "关系"],
+  "jade-time": ["Время в сюжете", "Story time", "剧情时间"],
+  "peonyset-dossier": ["Досье персонажа", "Character dossier", "角色档案"],
+  "peonyset-calendar": ["Календарь", "Calendar", "日历"],
+  "peonyset-notification": ["Уведомление", "Notification", "通知"]
 };
 
 function previewGallery(id) {
   const words = detailText[lang];
   const shots = previewImages[id]?.[lang] || [];
+  const translated = lang === "zh" && ["estate", "phone", "love-lab", "reproductive-system", "supernatural-codex"].includes(id);
   return `<section class="detail-gallery"><h3>${words.gallery}</h3>
-    ${shots.length ? `<p class="dialog-desc">${words.demo}</p><div class="preview-shots">
+    ${shots.length ? `<p class="dialog-desc">${words.demo}${translated ? " " + words.translated : ""}</p><div class="preview-shots">
       ${shots.map(file => {
         const key = file.replace(/-(ru|en|zh)(?=-|\.)/, "").replace(/\.webp$/, "");
         const caption = previewCaptions[key]?.[Object.keys(detailText).indexOf(lang)];
