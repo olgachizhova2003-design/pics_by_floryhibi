@@ -377,6 +377,16 @@ $("#plugin-grid").addEventListener("click", event => {
     selectedPlugin = choice.dataset.selectPlugin;
     pluginFrame = 0;
     renderPlugins();
+    if (matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+      const stars = document.createElement("span");
+      stars.className = "plugin-stars";
+      stars.setAttribute("aria-hidden", "true");
+      for (let i = 0; i < 5; i++) stars.append(document.createElement("i"));
+      $(".plugin-art").append(stars);
+      stars.addEventListener("animationend", event => {
+        if (event.target === stars) stars.remove();
+      });
+    }
     $(`[data-select-plugin="${selectedPlugin}"]`).focus({ preventScroll: true });
     if (matchMedia("(max-width: 900px)").matches) $("#plugin-grid").scrollIntoView({ block: "start" });
     return;

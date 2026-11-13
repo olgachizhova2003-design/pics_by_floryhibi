@@ -399,3 +399,57 @@ dialog.visual-details { width: min(820px, calc(100% - 28px)); }
 @media (max-width: 480px) {
   .preview-controls { justify-content: center; }
 }
+
+.hero-petals { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.hero-petals i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  aspect-ratio: .68;
+  border-radius: 90% 14% 75% 22%;
+  background: linear-gradient(148deg, #ffc2db, #e3247c 43%, #760f4d 85%);
+  box-shadow: inset 1px 1px 2px #ffe1eb80, 0 0 13px #ff489d50;
+  opacity: .45;
+  transform: rotate(var(--turn));
+}
+.hero-petals i:nth-child(1) { --x: 18%; --y: 26%; --size: 12px; --turn: -24deg; --delay: -2s; }
+.hero-petals i:nth-child(2) { --x: 70%; --y: 22%; --size: 9px; --turn: 40deg; --delay: -6s; }
+.hero-petals i:nth-child(3) { --x: 86%; --y: 38%; --size: 15px; --turn: 55deg; --delay: -4s; }
+.hero-petals i:nth-child(4) { --x: 54%; --y: 37%; --size: 7px; --turn: 12deg; --delay: -10s; }
+.hero-petals i:nth-child(5) { --x: 10%; --y: 53%; --size: 8px; --turn: 65deg; --delay: -8s; }
+.hero-petals i:nth-child(6) { --x: 77%; --y: 58%; --size: 12px; --turn: -35deg; --delay: -1s; }
+.hero-petals i:nth-child(7) { --x: 39%; --y: 44%; --size: 9px; --turn: -55deg; --delay: -5s; }
+@keyframes petal-fall {
+  0% { opacity: 0; transform: translate(-12px,-65px) rotate(var(--turn)); }
+  22%, 65% { opacity: .65; }
+  48% { transform: translate(28px,34px) rotate(calc(var(--turn) + 72deg)); }
+  100% { opacity: 0; transform: translate(-5px,155px) rotate(calc(var(--turn) + 145deg)); }
+}
+.plugin-stars { position: absolute; inset: 0; pointer-events: none; animation: star-fade .8s ease-out both; }
+.plugin-stars i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size, 12px);
+  aspect-ratio: 1;
+  background: #ffe7f5;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  animation: star-open .65s ease-out both;
+}
+.plugin-stars i:nth-child(1) { --x: 14%; --y: 24%; --size: 17px; }
+.plugin-stars i:nth-child(2) { --x: 78%; --y: 13%; }
+.plugin-stars i:nth-child(3) { --x: 89%; --y: 36%; --size: 19px; }
+.plugin-stars i:nth-child(4) { --x: 75%; --y: 81%; --size: 9px; }
+.plugin-stars i:nth-child(5) { --x: 22%; --y: 76%; --size: 10px; }
+@keyframes star-fade { 55% { opacity: 1; } to { opacity: 0; } }
+@keyframes star-open { from { transform: scale(.12) rotate(-24deg); } 42% { transform: scale(1.2); } to { transform: scale(.55) translateY(-10px); } }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-petals i { animation: petal-fall 12s var(--delay) ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plugin-stars { display: none; }
+}
+@media (max-width: 575px) {
+  .hero-petals i:nth-child(n+4) { display: none; }
+}
