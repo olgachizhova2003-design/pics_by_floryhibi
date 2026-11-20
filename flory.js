@@ -1,5 +1,6 @@
 const ui = {
   ru: {
+    newsTitle: "Что нового", newsLead: "Новые плагины, обновления и другие новости сайта.",
     skip: "К каталогу", language: "Язык", guide: "Гайд", start: "Гайд по TavoAI",
     hero: "Плагины для историй, в которых хочется остаться.",
     intro: "Телефон внутри ролевой, календарь событий, инструменты для персонажей и мира. Всё, что я создаю для TavoAI, в одном месте.",
@@ -15,6 +16,7 @@ const ui = {
     presetFile: "Пресет (.json)", regexFile: "Регексы", artRegex: "Регексы с картинками", textRegex: "Текстовые регексы"
   },
   en: {
+    newsTitle: "What’s new", newsLead: "New plugins, updates, and other site news.",
     skip: "Skip to plugins", language: "Language", guide: "Guide", start: "TavoAI guide",
     hero: "Plugins for stories you want to stay in.",
     intro: "An in-story phone, an event calendar, and tools for your characters and worlds. Everything I make for TavoAI, in one place.",
@@ -30,6 +32,7 @@ const ui = {
     presetFile: "Preset (.json)", regexFile: "Regex", artRegex: "Regex with images", textRegex: "Text-only regex"
   },
   zh: {
+    newsTitle: "最新动态", newsLead: "新插件、更新与网站消息。",
     skip: "跳到插件列表", language: "语言", guide: "指南", start: "TavoAI 指南",
     hero: "为让人流连的故事而做的插件。",
     intro: "剧情内手机、事件日历，以及角色与世界设定工具。我的 TavoAI 作品都在这里。",
@@ -47,12 +50,15 @@ const ui = {
 };
 
 const order = {
+  recall: 1, prosepolisher: 3,
   phone: 1, "scene-director": 1, "event-calendar": 1, "persona-atelier": 2, organizer: 3,
   observer: 1, "supernatural-codex": 1, "reproductive-system": 2, facets: 2, estate: 1,
   "prompt-debugger": 3, "love-lab": 2
 };
 let selectedPlugin = "phone";
 const summaries = {
+  recall: ["Память и хроника для ролевых чатов на 3 000+ сообщений.", "Memory and a chronicle for roleplay chats with 3,000+ messages.", "为 3,000 条以上消息的角色扮演聊天记录记忆和纪事。"],
+  prosepolisher: ["Повторы в ответах персонажей: поиск, автоанализ и исключения.", "Find repeated phrases, analyze new replies, and manage exceptions.", "查找角色回复中的重复词句，自动分析并设置例外。"],
   phone: ["Переписка, звонки и соцсети прямо внутри ролевой.", "Text, call and browse social apps inside your roleplay.", "在角色扮演中发消息、通话和浏览社交应用。"],
   "scene-director": ["Сюжетные линии, случайные события и подсказки под сцену.", "Story threads, random events and scene-specific suggestions.", "剧情线、随机事件和场景建议。"],
   "event-calendar": ["Расписание и даты, которые ИИ учитывает в сюжете.", "Schedules and dates the AI can use in your story.", "让 AI 在剧情中记住日期和日程。"],
@@ -85,6 +91,7 @@ function downloadLink(file, label) {
 
 // Dates are first appearances in the site repository. Likes are from the Tavo Hub snapshot on 2026-11-13.
 const pluginDates = {
+  recall: "2026-11-21", prosepolisher: "2026-11-21",
   phone: "2026-10-08", "scene-director": "2026-10-30", "event-calendar": "2026-10-22",
   "persona-atelier": "2026-10-30", organizer: "2026-10-04", "prompt-debugger": "2026-10-05"
 };
@@ -104,9 +111,9 @@ let sortMode = "new";
 function pluginBadges(id) {
   const badges = pluginLabels[lang].badges;
   const names = [];
-  if (pluginDates[id] === "2026-10-30") names.push(badges[0]);
+  if (["recall", "prosepolisher"].includes(id)) names.push(badges[0]);
   if (pluginLikes[id] >= 39) names.push(badges[1]);
-  if (["scene-director", "event-calendar", "persona-atelier", "facets", "estate"].includes(id)) names.push(badges[2]);
+  if (["scene-director", "event-calendar", "persona-atelier", "facets", "estate", "recall"].includes(id)) names.push(badges[2]);
   if (id !== "love-lab") names.push(badges[3]);
   return names.map(name => `<span>${name}</span>`).join("");
 }
@@ -235,6 +242,45 @@ function renderStyles() {
     </article>`).join("");
 }
 
+function renderNews() {
+  const entries = [...siteNews].sort((a, b) => b.date.localeCompare(a.date));
+  const fragment = document.createDocumentFragment();
+  for (const entry of entries) {
+    const row = document.createElement("li");
+    const article = document.createElement("article");
+    article.className = "news-entry";
+    const date = document.createElement("time");
+    date.dateTime = entry.date;
+    date.textContent = entry.date.split("-").reverse().join("/");
+    const body = document.createElement("div");
+    const heading = document.createElement("h3");
+    const copy = entry[lang];
+    heading.textContent = copy.title;
+    const items = document.createElement("ul");
+    for (const update of copy.items) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = "#plugins";
+      link.dataset.newsPlugin = update.plugin;
+      link.textContent = update.text;
+      item.append(link);
+      items.append(item);
+    }
+    body.append(heading, items);
+    article.append(date, body);
+    row.append(article);
+    fragment.append(row);
+  }
+  $("#news-list").replaceChildren(fragment);
+}
+
+$("#news-list").addEventListener("click", event => {
+  const link = event.target.closest("[data-news-plugin]");
+  if (!link) return;
+  event.preventDefault();
+  openPlugin(link.dataset.newsPlugin);
+});
+
 function render() {
   const t = catalog[lang];
   const words = ui[lang];
@@ -251,6 +297,7 @@ function render() {
   document.querySelectorAll("[data-text]").forEach(node => { node.textContent = t[node.dataset.text]; });
   $("#filters").innerHTML = words.categories.map((label, index) =>
     `<button type="button" data-category="${index}" aria-pressed="${category === index}">${label}</button>`).join("");
+  renderNews();
   renderPlugins();
   renderResources(t.presets, "#preset-grid");
   renderResources(t.themes, "#theme-grid");
@@ -338,6 +385,7 @@ function openPlugin(id) {
   content.innerHTML = `<div class="detail-head"><img src="assets/${id}.webp" alt="" width="80" height="80">
     <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
+    ${item.credit ? `<p class="dialog-note">${item.credit} <a class="text-link" href="${item.source}" target="_blank" rel="noopener">GitHub</a></p>` : ""}
     ${previewGallery(id)}
     ${id === "love-lab" ? `<p class="dialog-note">${words.unavailable}</p>` :
       `<p class="dialog-note">${words.installNote}</p>

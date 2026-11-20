@@ -15,6 +15,8 @@ ru:{
   ],
   plTitle:"Плагины",plLead:"Расширения, добавляющие новые механики в чат.",
   plugins:[
+    {"n": "Recall", "img": "assets/recall.webp", "f": "recall.tpg", "d": "Память для длинных ролевых историй, включая чаты на 3 000+ сообщений. Recall обрабатывает переписку порциями и сохраняет подтверждённые события, факты и отношения в лорбук. Хроника помогает следить за днями истории, а подробности возвращаются в контекст по ключевым словам. Перед записью можно проверить и отредактировать найденное.", "t": ["Память", "Лорбук"]},
+    {"n": "ProsePolisher", "img": "assets/prosepolisher.webp", "f": "prosepolisher.tpg", "d": "Локально находит повторяющиеся обороты в ответах персонажей и показывает частоту повторений. Служебные теги, статусы, промпты картинок и HTML-оформление пропускаются. Есть автоанализ, исключения, усиленные фразы и экспорт JSON. Можно включить подсказку модели избегать найденных повторов. Требуется Advanced Rendering в TavoAI.", "t": ["Текст", "Анализ"], "credit": "Original by NemoVonNirgend; modifications by Karelian / unkarelian. TavoAI port by @floryhibi. GPL-3.0.", "source": "https://github.com/unkarelian/ProsePolisher"},
     {n:"Вкусы",img:"facets.jpg",f:"facets.tpg",d:"Генератор досье вкусов и привычек персонажа: еда, музыка, работа, стиль жизни. Модель чата пишет досье, а плагин раскладывает его в лорбук с ключевыми словами — записи всплывают, только когда тема появляется в диалоге.",t:["Механика","Лорбук"]},
     {n:"Дома",img:"estate.jpg",f:"estate.tpg",d:"Генератор лорбука «дом персонажа» по комнатам: кухня, спальня, сад и любые зоны. У каждой записи есть Visual-блок с тегами для генерации изображения комнаты, а срабатывают они, только когда место упоминается в чате.",t:["Мир","Лорбук"]},
     {n:"Любовная лаборатория",img:"lovelab.jpg",f:"love-lab.tpg",d:"Маленькая лаборатория вашей связи: совместимость, динамика отношений и скрытые стороны истории. Нумерология, матрица судьбы, астрология и таро — всё в одной панели.",t:["Отношения"]},
@@ -60,6 +62,8 @@ en:{
   ],
   plTitle:"Plugins",plLead:"Extensions that add new mechanics to your chats.",
   plugins:[
+    {"n": "Recall", "img": "assets/recall.webp", "f": "recall.tpg", "d": "Memory for long roleplay stories, including chats with 3,000+ messages. Recall processes conversations in batches and saves verified events, facts, and relationships to a lorebook. A chronicle tracks story days, while detailed memories are retrieved by keywords. You can review and edit the findings before saving them.", "t": ["Memory", "Lorebook"]},
+    {"n": "ProsePolisher", "img": "assets/prosepolisher.webp", "f": "prosepolisher.tpg", "d": "Finds repeated phrases in character replies locally and shows their frequency. Service tags, status blocks, image prompts, and HTML formatting are skipped. Includes automatic analysis, exceptions, weighted phrases, and JSON export. An optional prompt hint helps the model avoid detected repetitions. Requires Advanced Rendering in TavoAI.", "t": ["Text", "Analysis"], "credit": "Original by NemoVonNirgend; modifications by Karelian / unkarelian. TavoAI port by @floryhibi. GPL-3.0.", "source": "https://github.com/unkarelian/ProsePolisher"},
     {n:"Facets",img:"facets.jpg",f:"facets.tpg",d:"Generates a 'tastes & habits dossier' for a character, user or NPC: food, music, work, lifestyle. The chat model writes the dossier, and the plugin splits it into lorebook entries with keywords that trigger only when the topic comes up.",t:["Mechanics","Lorebook"]},
     {n:"Estate",img:"estate.jpg",f:"estate.tpg",d:"Builds a 'character's home' lorebook room by room: kitchen, bedroom, garden and any custom areas. Each entry includes a [Visual] tag block for room image generation and triggers only when the place is mentioned.",t:["World","Lorebook"]},
     {n:"Love Lab",img:"lovelab.jpg",f:"love-lab.tpg",d:"A little laboratory of your bond: compatibility, relationship dynamics and hidden sides of your story. Numerology, destiny matrix, astrology and tarot — all in one panel.",t:["Relations"]},
@@ -104,6 +108,8 @@ zh:{
   ],
   plTitle:"插件",plLead:"为聊天添加新机制的扩展。",
   plugins:[
+    {"n": "Recall", "img": "assets/recall.webp", "f": "recall.tpg", "d": "适合长篇角色扮演故事的记忆工具，支持 3,000 条以上消息的聊天。Recall 分批处理对话，将已核实的事件、事实和关系保存到世界书。纪事记录故事天数，详细记忆通过关键词触发。保存前可以检查和编辑提取结果。", "t": ["记忆", "世界书"]},
+    {"n": "ProsePolisher", "img": "assets/prosepolisher.webp", "f": "prosepolisher.tpg", "d": "在本地查找角色回复中反复出现的词句并显示次数，跳过功能标签、状态栏、图片提示词和 HTML 格式。支持自动分析、例外词、加权短语和 JSON 导出。可选择向模型提供提示以减少已发现的重复。需要启用 TavoAI 的 Advanced Rendering。", "t": ["文本", "分析"], "credit": "Original by NemoVonNirgend; modifications by Karelian / unkarelian. TavoAI port by @floryhibi. GPL-3.0.", "source": "https://github.com/unkarelian/ProsePolisher"},
     {n:"口味",img:"facets.jpg",f:"facets.tpg",d:"为角色、用户或 NPC 生成「口味与习惯档案」：美食、音乐、工作、生活方式。由当前聊天模型撰写档案，并拆分为带关键词的设定集条目，仅在话题出现时触发。",t:["机制","设定集"]},
     {n:"家园",img:"estate.jpg",f:"estate.tpg",d:"按房间生成「角色之家」设定集：厨房、卧室、花园及任意区域。每条记录附带用于生成房间图片的 [Visual] 标签块，仅在提及该地点时触发。",t:["世界","设定集"]},
     {n:"恋爱实验室",img:"lovelab.jpg",f:"love-lab.tpg",d:"探索你们羁绊的小实验室：契合度、关系动态与故事的隐藏面。数字命理、命运矩阵、占星与塔罗，尽在一个面板中。",t:["关系"]},

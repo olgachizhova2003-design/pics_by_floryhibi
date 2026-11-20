@@ -1,4 +1,38 @@
 const previewImages = {
+  "recall": {
+  "ru": [
+    "recall-ru.webp",
+    "recall-ru-screen2.webp",
+    "recall-ru-screen3.webp"
+  ],
+  "en": [
+    "recall-en.webp",
+    "recall-en-screen2.webp",
+    "recall-en-screen3.webp"
+  ],
+  "zh": [
+    "recall-zh.webp",
+    "recall-zh-screen2.webp",
+    "recall-zh-screen3.webp"
+  ]
+},
+  "prosepolisher": {
+  "ru": [
+    "prosepolisher-ru.webp",
+    "prosepolisher-ru-screen2.webp",
+    "prosepolisher-ru-screen3.webp"
+  ],
+  "en": [
+    "prosepolisher-en.webp",
+    "prosepolisher-en-screen2.webp",
+    "prosepolisher-en-screen3.webp"
+  ],
+  "zh": [
+    "prosepolisher-zh.webp",
+    "prosepolisher-zh-screen2.webp",
+    "prosepolisher-zh-screen3.webp"
+  ]
+},
   "estate": {
     "en": [
       "estate-en.webp",
