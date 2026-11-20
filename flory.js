@@ -85,8 +85,13 @@ try {
 let category = 0;
 let model = "v5";
 
+const siteRelease = document.querySelector('meta[name="site-release"]')?.content || "20261121-2";
+function assetUrl(file) {
+  return file + (file.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(siteRelease);
+}
+
 function downloadLink(file, label) {
-  return `<a class="download" href="${file}" download>${label} ↓</a>`;
+  return `<a class="download" href="${assetUrl(file)}" download>${label} ↓</a>`;
 }
 
 // Dates are first appearances in the site repository. Likes are from the Tavo Hub snapshot on 2026-11-13.
@@ -126,10 +131,10 @@ function pluginPreview(id) {
   const labels = pluginLabels[lang];
   const source = pluginFrame ? "assets/previews/" + shots[pluginFrame - 1] : "assets/" + id + ".webp";
   return `<div class="plugin-art${pluginFrame ? " showing-screen" : ""}">
-    <img src="${source}" alt="${pluginFrame ? detailText[lang].gallery + " " + pluginFrame : ""}" width="480" height="480">
+    <img src="${assetUrl(source)}" alt="${pluginFrame ? detailText[lang].gallery + " " + pluginFrame : ""}" width="480" height="480">
   </div>${shots.length ? `<div class="preview-label">${labels.screens}</div><div class="preview-controls" role="group" aria-label="${labels.screens}">
     <button type="button" data-plugin-frame="0" aria-pressed="${pluginFrame === 0}">${labels.cover}</button>
-    ${shots.map((shot, i) => `<button type="button" data-plugin-frame="${i + 1}" aria-label="${labels.screens} ${i + 1}" aria-pressed="${pluginFrame === i + 1}"><img src="assets/previews/${shot}" alt="" loading="lazy"></button>`).join("")}
+    ${shots.map((shot, i) => `<button type="button" data-plugin-frame="${i + 1}" aria-label="${labels.screens} ${i + 1}" aria-pressed="${pluginFrame === i + 1}"><img src="${assetUrl("assets/previews/" + shot)}" alt="" loading="lazy"></button>`).join("")}
   </div>` : ""}`;
 }
 
@@ -172,13 +177,13 @@ function renderPlugins() {
         <div class="actions">
           <button type="button" class="button secondary" data-plugin="${selected.id}">${words.details} ↗</button>
           ${selected.id === "love-lab" ? `<span class="category">${words.unavailable}</span>` :
-            `<a class="button primary" href="${selected.f}" download>${t.dl} .tpg ↓</a>`}
+            `<a class="button primary" href="${assetUrl(selected.f)}" download>${t.dl} .tpg ↓</a>`}
         </div>
       </div>
     </article>
     <div class="plugin-index" role="group" aria-label="${t.plTitle}">
       ${plugins.map(item => `<button type="button" class="plugin-choice" data-select-plugin="${item.id}" aria-pressed="${item.id === selected.id}">
-        <img src="assets/${item.id}.webp" alt="" width="42" height="42" loading="lazy">
+        <img src="${assetUrl("assets/" + item.id + ".webp")}" alt="" width="42" height="42" loading="lazy">
         <span class="choice-copy"><strong>${item.n}</strong>
           <span class="choice-description">${summaries[item.id][Object.keys(ui).indexOf(lang)]}</span>
           <span class="choice-badges">${pluginBadges(item.id)}</span></span><span class="choice-arrow" aria-hidden="true">↗</span>
@@ -353,8 +358,8 @@ function previewGallery(id) {
       ${shots.map(file => {
         const key = file.replace(/-(ru|en|zh)(?=-|\.)/, "").replace(/\.webp$/, "");
         const caption = previewCaptions[key]?.[Object.keys(detailText).indexOf(lang)];
-        return `<figure><a href="assets/previews/${file}" target="_blank" rel="noopener">
-          <img src="assets/previews/${file}" alt="${caption ? caption + " · " : ""}${words.enlarge}" loading="lazy"></a>
+        return `<figure><a href="${assetUrl("assets/previews/" + file)}" target="_blank" rel="noopener">
+          <img src="${assetUrl("assets/previews/" + file)}" alt="${caption ? caption + " · " : ""}${words.enlarge}" loading="lazy"></a>
           ${caption ? `<figcaption>${caption}</figcaption>` : ""}</figure>`;
       }).join("")}</div>`
       : `<p class="dialog-note">${words.missing}</p>`}
@@ -382,7 +387,7 @@ function openPlugin(id) {
   const t = catalog[lang];
   const words = ui[lang];
   const item = t.plugins.find(plugin => plugin.f === id + ".tpg");
-  content.innerHTML = `<div class="detail-head"><img src="assets/${id}.webp" alt="" width="80" height="80">
+  content.innerHTML = `<div class="detail-head"><img src="${assetUrl("assets/" + id + ".webp")}" alt="" width="80" height="80">
     <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
     ${item.credit ? `<p class="dialog-note">${item.credit} <a class="text-link" href="${item.source}" target="_blank" rel="noopener">GitHub</a></p>` : ""}
