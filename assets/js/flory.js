@@ -88,7 +88,7 @@ let model = "v5";
 const siteRelease = document.querySelector('meta[name="site-release"]')?.content || "20261121-2";
 function assetUrl(file) {
   const plugin = pluginDownloads[file];
-  if (plugin) file = encodeURIComponent(plugin.file);
+  if (plugin) file = "downloads/plugins/" + encodeURIComponent(plugin.file);
   return file + (file.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(siteRelease);
 }
 
@@ -372,7 +372,7 @@ function previewGallery(id) {
 
 function openPreset(cover) {
   const item = catalog[lang].presets.find(preset => preset.img === cover);
-  const id = cover.replace(".jpg", "");
+  const id = cover.split("/").pop().replace(/\.[^.]+$/, "");
   content.innerHTML = `<div class="detail-head"><img src="${item.img}" alt="" width="80" height="80">
     <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
