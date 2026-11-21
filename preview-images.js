@@ -200,16 +200,19 @@ const previewImages = {
   },
   "phone": {
     "en": [
+      "phone-en-messages.webp",
       "phone-en.webp",
       "phone-en-screen2.webp",
       "phone-en-screen4.webp"
     ],
     "ru": [
+      "phone-ru-messages.webp",
       "phone-ru.webp",
       "phone-ru-screen2.webp",
       "phone-ru-screen4.webp"
     ],
     "zh": [
+      "phone-zh-messages.webp",
       "phone-zh.webp",
       "phone-zh-screen2.webp",
       "phone-zh-screen3.webp"

@@ -2,7 +2,7 @@ const siteNews = [
   {
     "date": "2026-11-21",
     "ru": {
-      "title": "Два новых плагина и два обновления",
+      "title": "Два новых плагина и три обновления",
       "items": [
         {
           "plugin": "recall",
@@ -19,11 +19,15 @@ const siteNews = [
         {
           "plugin": "event-calendar",
           "text": "Обновлён Event Calendar до 1.6.1."
+        },
+        {
+          "plugin": "phone",
+          "text": "Обновлён Phone до 1.42.0 — новый интерфейс сообщений, поиск и фильтр непрочитанных, снижена нагрузка при обновлении переписок."
         }
       ]
     },
     "en": {
-      "title": "Two new plugins and two updates",
+      "title": "Two new plugins and three updates",
       "items": [
         {
           "plugin": "recall",
@@ -40,11 +44,15 @@ const siteNews = [
         {
           "plugin": "event-calendar",
           "text": "Event Calendar updated to 1.6.1."
+        },
+        {
+          "plugin": "phone",
+          "text": "Phone updated to 1.42.0 — a new messenger interface, search and unread filter, with lighter conversation updates."
         }
       ]
     },
     "zh": {
-      "title": "两款新插件与两项更新",
+      "title": "两款新插件与三项更新",
       "items": [
         {
           "plugin": "recall",
@@ -61,6 +69,10 @@ const siteNews = [
         {
           "plugin": "event-calendar",
           "text": "Event Calendar 更新至 1.6.1。"
+        },
+        {
+          "plugin": "phone",
+          "text": "Phone 更新至 1.42.0：全新消息界面、搜索与未读筛选，并优化对话更新性能。"
         }
       ]
     }
