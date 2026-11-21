@@ -139,3 +139,62 @@ zh:{
   ],
   footer:"用 ♥ 制作 · FloryHibi"
 }};
+
+const pluginDownloads = {
+  "persona-atelier.tpg": {
+    "file": "✦ Persona Atelier by @floryhibi.tpg",
+    "version": "1.5.0"
+  },
+  "prosepolisher.tpg": {
+    "file": "ProsePolisher by @floryhibi.tpg",
+    "version": "1.0.0"
+  },
+  "supernatural-codex.tpg": {
+    "file": "Supernatural Codex by @floryhibi.tpg",
+    "version": "1.7.2"
+  },
+  "facets.tpg": {
+    "file": "🎨 Facets by @floryhibi.tpg",
+    "version": "1.3.1"
+  },
+  "scene-director.tpg": {
+    "file": "🎬 Scene Director by @floryhibi.tpg",
+    "version": "2.1.1"
+  },
+  "estate.tpg": {
+    "file": "🏠 Estate by @floryhibi.tpg",
+    "version": "1.3.1"
+  },
+  "observer.tpg": {
+    "file": "👁 Observer by @floryhibi.tpg",
+    "version": "2.4.0"
+  },
+  "love-lab.tpg": {
+    "file": "💘 Love Lab by @floryhibi.tpg",
+    "version": "1.8.1"
+  },
+  "recall.tpg": {
+    "file": "💾 Recall by @floryhibi.tpg",
+    "version": "1.2.2"
+  },
+  "organizer.tpg": {
+    "file": "📂 Organizer by @floryhibi.tpg",
+    "version": "1.1.0"
+  },
+  "event-calendar.tpg": {
+    "file": "📅 Event Calendar by @floryhibi.tpg",
+    "version": "1.6.1"
+  },
+  "phone.tpg": {
+    "file": "📱 Phone by @floryhibi.tpg",
+    "version": "1.42.0"
+  },
+  "reproductive-system.tpg": {
+    "file": "🤰 Reproductive System by @floryhibi.tpg",
+    "version": "4.0.0"
+  },
+  "prompt-debugger.tpg": {
+    "file": "🧪 Prompt Debugger by @floryhibi.tpg",
+    "version": "1.4.1"
+  }
+};

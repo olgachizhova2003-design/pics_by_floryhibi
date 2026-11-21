@@ -87,11 +87,14 @@ let model = "v5";
 
 const siteRelease = document.querySelector('meta[name="site-release"]')?.content || "20261121-2";
 function assetUrl(file) {
+  const plugin = pluginDownloads[file];
+  if (plugin) file = encodeURIComponent(plugin.file);
   return file + (file.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(siteRelease);
 }
 
 function downloadLink(file, label) {
-  return `<a class="download" href="${assetUrl(file)}" download>${label} ↓</a>`;
+  const filename = pluginDownloads[file]?.file;
+  return `<a class="download" href="${assetUrl(file)}" download${filename ? `="${filename}"` : ""}>${label} ↓</a>`;
 }
 
 // Dates are first appearances in the site repository. Likes are from the Tavo Hub snapshot on 2026-11-13.
@@ -171,13 +174,12 @@ function renderPlugins() {
     <article class="plugin-display" aria-labelledby="selected-plugin">
       <div class="plugin-preview">${pluginPreview(selected.id)}</div>
       <div class="plugin-copy">
-        <span class="category">${words.categories[order[selected.id]]}</span>
+        <span class="category">${words.categories[order[selected.id]]} · v${pluginDownloads[selected.f].version}</span>
         <h3 id="selected-plugin">${selected.n}</h3>
         <p>${summaries[selected.id][Object.keys(ui).indexOf(lang)]}</p>
         <div class="actions">
           <button type="button" class="button secondary" data-plugin="${selected.id}">${words.details} ↗</button>
-          ${selected.id === "love-lab" ? `<span class="category">${words.unavailable}</span>` :
-            `<a class="button primary" href="${assetUrl(selected.f)}" download>${t.dl} .tpg ↓</a>`}
+          <a class="button primary" href="${assetUrl(selected.f)}" download="${pluginDownloads[selected.f].file}">${t.dl} .tpg ↓</a>
         </div>
       </div>
     </article>
@@ -264,9 +266,11 @@ function renderNews() {
     const items = document.createElement("ul");
     for (const update of copy.items) {
       const item = document.createElement("li");
-      const link = document.createElement("a");
-      link.href = "#plugins";
-      link.dataset.newsPlugin = update.plugin;
+      const link = document.createElement(update.plugin ? "a" : "span");
+      if (update.plugin) {
+        link.href = "#plugins";
+        link.dataset.newsPlugin = update.plugin;
+      }
       link.textContent = update.text;
       item.append(link);
       items.append(item);
@@ -388,13 +392,12 @@ function openPlugin(id) {
   const words = ui[lang];
   const item = t.plugins.find(plugin => plugin.f === id + ".tpg");
   content.innerHTML = `<div class="detail-head"><img src="${assetUrl("assets/" + id + ".webp")}" alt="" width="80" height="80">
-    <div><span class="category">${item.t.join(" · ")}</span><h2 id="detail-title">${item.n}</h2></div></div>
+    <div><span class="category">${item.t.join(" · ")} · v${pluginDownloads[item.f].version}</span><h2 id="detail-title">${item.n}</h2></div></div>
     <p class="dialog-desc">${item.d}</p>
     ${item.credit ? `<p class="dialog-note">${item.credit} <a class="text-link" href="${item.source}" target="_blank" rel="noopener">GitHub</a></p>` : ""}
     ${previewGallery(id)}
-    ${id === "love-lab" ? `<p class="dialog-note">${words.unavailable}</p>` :
-      `<p class="dialog-note">${words.installNote}</p>
-      <div class="actions">${downloadLink(item.f, t.dl + " .tpg")}<a class="button secondary" href="guide.html#plugins">${words.install} ↗</a></div>`}`;
+    <p class="dialog-note">${words.installNote}</p>
+    <div class="actions">${downloadLink(item.f, t.dl + " .tpg")}<a class="button secondary" href="guide.html#plugins">${words.install} ↗</a></div>`;
   dialog.classList.add("visual-details");
   dialog.showModal();
 }
